@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CH8 表單排版(JS)</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/myall.css">
+</head>
+
+<body>
+    <div class="container p-3">
+        <div class="row">
+            <div class="col-12">
+                <div class="display-5 text-center fw-600 text-bg-success p-2">課程線上報名表</div>
+            </div>
+        </div>
+
+        <div class="row p-2">
+            <div class="col-12">
+                <div class="mb-3">
+                    <label for="username" class="form-label">姓名</label>
+                    <input type="text" class="form-control" id="username" placeholder="長度限制2-8個字">
+                    <div class="valid-feedback">姓名長度符合規定</div>
+                    <div class="invalid-feedback">姓名長度不符合規定</div>
+                </div>
+            </div>
+
+
+            <div class="col-12">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="text" class="form-control" id="email" placeholder="長度限制8-15字">
+                    <div class="valid-feedback">email輸入符合規定</div>
+                    <div class="invalid-feedback">email輸入不符合規定</div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="mb-3">
+                    <label for="password" class="form-label">密碼</label>
+                    <input type="password" class="form-control" id="password" placeholder="長度限制8-16個字">
+                    <div class="valid-feedback">密碼輸入符合規定</div>
+                    <div class="invalid-feedback">密碼輸入不符合規定</div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="mb-3">
+                    <label for="phone" class="form-label">手機</label>
+                    <input type="phone" class="form-control" id="phone" placeholder="長度限制10個字">
+                    <div class="valid-feedback">手機輸入符合規定</div>
+                    <div class="invalid-feedback">手機輸入不符合規定</div>
+                </div>
+            </div>
+
+            <div class="col-12 text-center mt-3">
+                <button class="btn text-bg-success" id="ok_btn">確認送出</button>
+                <button class="btn text-bg-secondary">重新填寫</button>
+            </div>
+        </div>
+
+        <!-- 顯示輸入成功並送出的訊息區塊 -->
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="display-5 text-center fw-600 text-success p-2"> --- 報名資料確認 --- </div>
+            </div>
+            <div class="col-12" id="showmsg">
+            </div>
+        </div>
+    </div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery-4.0.0.js"></script>
+    <script>
+        let flag_username = false;  // 布林值, 紀錄username是否符合規定
+        let flag_email = false;
+        let flag_password = false;
+        let flag_phone = false;
+        $(function () {
+            // 即時監聽 username: 監聽對象.on(事件, 動作)
+            $('#username').on('input', function () {
+                // console.log($("#username").val());
+                // val(): 取得值, this: 表當下這個事件 = #username
+                // length: 長度
+                console.log('input:' + $(this).val() + ' length: ' + $(this).val().length);
+                if ($(this).val().length > 1 && $(this).val().length < 9) {
+                    // 符合規定:2-8個字
+                    console.log('符合規定');
+                    // 先刪除is-invaild, 再加入is-valid, 避免同時出現
+                    $(this).removeClass('is-invalid');
+                    $(this).addClass('is-valid');
+                    flag_username = true;
+                } else {
+                    // 不符合規定
+                    console.log('不符合規定');
+                    $(this).removeClass('is-valid');
+                    $(this).addClass('is-invalid');
+                    flag_username = false;
+                }
+            });
+
+            // 輸入完成後離開欄位才觸發
+            // $('#username').on('change', function(){
+            //     console.log('change: ' + $(this).val());
+            // });
+
+            // 監聽email: 須包含@這個字元, 使用includes(); 8-15字
+            $('#email').on('change', function () {
+                console.log('email:' + $(this).val());
+                if ($(this).val().length > 7 && $(this).val().length < 16 && $(this).val().includes('@')) {
+                    console.log('phone ok');
+                    $(this).removeClass('is-invalid');
+                    $(this).addClass('is-valid');
+                    flag_email = true;
+                }
+                else {
+                    console.log('phone error')
+                    $(this).removeClass('is-valid');
+                    $(this).addClass('is-invalid');
+                    flag_email = false;
+                }
+            });
+
+            // 監聽密碼: 須8-16字
+            $('#password').on('change', function () {
+                console.log('password:' + $(this).val());
+                if ($(this).val().length > 7 && $(this).val().length < 17) {
+                    console.log('password ok');
+                    $(this).removeClass('is-invalid');
+                    $(this).addClass('is-valid');
+                    flag_password = true;
+                } else {
+                    console.log('password error');
+                    $(this).removeClass('is-valid');
+                    $(this).addClass('is-invalid');
+                    flag_password = false;
+                }
+            });
+
+            // 監聽手機: 須10個字; 開頭為09XXXXXXXX, 使用startWith()
+            $('#phone').on('change', function () {
+                console.log('phone: ' + $(this).val());
+                if ($(this).val().length == 10 && $(this).val().startsWith('09')) {
+                    console.log('phone ok');
+                    $(this).removeClass('is-invalid');
+                    $(this).addClass('is-valid');
+                    flag_phone = true;
+                } else {
+                    console.log('phone error');
+                    $(this).removeClass('is-valid');
+                    $(this).addClass('is-invalid');
+                    flag_phone = false;
+                }
+            });
+
+            // 監聽確認送出按鈕 #ok_btn
+            $('#ok_btn').on('click', function () {
+                if (flag_username == true && flag_email == true && flag_password == true && flag_phone == true) {
+                    console.log('click ok_btn: 符合規定');
+                    const strHTML = `<div class="h5">姓名:${$('#username').val()}</div>
+                                     <div class="h5">Email:${$('#email').val()}</div>
+                                     <div class="h5">密碼:${$('#password').val()}</div>
+                                     <div class="h5">手機:${$('#phone').val()}</div>`;
+                    $('#showmsg').html(strHTML);
+                } else {
+                    console.log('click ok_btn: 不符合規定');
+                    alert('不符合輸入規定!');
+                }
+
+            })
+        })
+    </script>
+
+</body>
+
+</html>
