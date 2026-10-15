@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zw-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CH7 - Flex時間軸(TimeLine)</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/myall.css">
+    <style>
+        .imgbox {
+            height: 220px;
+        }
+
+        .timeline-section {
+            /* 相對定位 */
+            position: relative;
+        }
+
+        .timeline-section::before {
+            /* 絕對定位 */
+            position: absolute;
+            /* 偽元素的內容, 因為沒有文字所以給空 */
+            content: "";
+            width: 8px;
+            /* 顏色用rgba設定透明度 */
+            background-color: rgba(0, 0, 255, 0.5);
+            /* 根據定位設定在t0b0, 並往左移50%到中間 */
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            /* 再往右移一半, 因為left的基準左邊, 當線變粗時看起來就沒有置中*/
+            transform: translateX(-50%);
+        }
+
+        .timeline-section-pointer {
+            position: relative;
+        }
+
+        .timeline-section-pointer::before {
+            position: absolute;
+            content: "";
+            /* 圓形: 方形再導圓角 */
+            width: 20px;
+            height: 20px;
+            background-color: rgba(232, 232, 236, 0.8);
+            border-radius: 50%;
+            /* 中空: 底色給淺色, 再給邊框 */
+            border: 5px solid rgba(0, 0, 255, 0.8);
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        @media screen and (max-width: 768px) {
+            /* 多個一起呼叫用","隔開 */
+            /* .timeline-section::before, .timeline-section-pointer::before{
+                display: none;
+            } */
+
+            .timeline-section::before {
+                left: -20px;
+            }
+
+            .timeline-section-pointer::before {
+                left: -8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="display-4 text-center fw-600 my-4">時間軸(TimeLine)</div>
+        <!-- timeline-section 時間軸的那條線,用偽元素 -->
+        <div class="timeline-section">
+            <!--  align-items-center 垂直置中 -->
+            <div class="row mt-3 align-items-center timeline-section-pointer">
+                <div class="col-md-6">
+                    <div class="imgbox bg-img roller-t" style="background-image: url(images/Film/film03.avif);">
+                        <div class="rollerbox-t">
+                            <button class="btn btn-primary">查看更多</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="h4 text-center mt-3">標題01</div>
+                    <p>不久幹什麼，不了代表只要鎖定食物情形強大感情，走向全球，異常聯繫方式大戰也在青年，賓館聽說採訪非常給我安排家人也就是面向給我們給予很熱這樣，較大之家研究所玄幻劇情醫生其他上面本網站緊張一家英國，言論你想說明求購把我適當需要不能下載，不停負責人，上了成熟一。
+                    </p>
+                </div>
+            </div>
+            <div class="row mt-3 flex-row-reverse align-items-center timeline-section-pointer">
+                <div class="col-md-6">
+                    <div class="imgbox bg-img roller-r" style="background-image: url(images/Film/film02.avif);">
+                        <div class="rollerbox-r">
+                            <button class="btn btn-primary">查看更多</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="h4 text-center mt-3">標題02</div>
+                    <p>不久幹什麼，不了代表只要鎖定食物情形強大感情，走向全球，異常聯繫方式大戰也在青年，賓館聽說採訪非常給我安排家人也就是面向給我們給予很熱這樣，較大之家研究所玄幻劇情醫生其他上面本網站緊張一家英國，言論你想說明求購把我適當需要不能下載，不停負責人，上了成熟一。
+                    </p>
+                </div>
+            </div>
+            <div class="row mt-3 align-items-center timeline-section-pointer">
+                <div class="col-md-6">
+                    <div class="imgbox bg-img roller-l" style="background-image: url(images/Film/film06.avif);">
+                        <div class="rollerbox-l">
+                            <button class="btn btn-primary">查看更多</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="h4 text-center mt-3">標題03</div>
+                    <p>不久幹什麼，不了代表只要鎖定食物情形強大感情，走向全球，異常聯繫方式大戰也在青年，賓館聽說採訪非常給我安排家人也就是面向給我們給予很熱這樣，較大之家研究所玄幻劇情醫生其他上面本網站緊張一家英國，言論你想說明求購把我適當需要不能下載，不停負責人，上了成熟一。
+                    </p>
+                </div>
+            </div>
+            <div class="row mt-3 flex-row-reverse align-items-center timeline-section-pointer">
+                <div class="col-md-6">
+                    <div class="imgbox bg-img roller-b" style="background-image: url(images/Film/film01.avif);">
+                        <div class="rollerbox-b">
+                            <button class="btn btn-primary">查看更多</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="h4 text-center mt-3">標題04</div>
+                    <p>不久幹什麼，不了代表只要鎖定食物情形強大感情，走向全球，異常聯繫方式大戰也在青年，賓館聽說採訪非常給我安排家人也就是面向給我們給予很熱這樣，較大之家研究所玄幻劇情醫生其他上面本網站緊張一家英國，言論你想說明求購把我適當需要不能下載，不停負責人，上了成熟一。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
