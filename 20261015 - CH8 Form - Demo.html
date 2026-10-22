@@ -18,6 +18,7 @@
         </div>
 
         <div class="row p-2">
+            <!-- 基本輸入框 -->
             <div class="col-12">
                 <div class="mb-3">
                     <label for="username" class="form-label">姓名</label>
@@ -55,6 +56,7 @@
                 </div>
             </div>
 
+            <!-- select 城市選單 -->
             <div class="col-12 mb-3">
                 <label for="city" class="form-label">居住地</label>
                 <select name="" class="form-select" id="city">
@@ -63,6 +65,79 @@
                 </select>
                 <div class="valid-feedback">已選擇縣市名稱</div>
                 <div class="invalid-feedback">未選擇縣市名稱</div>
+            </div>
+
+            <!-- checkbox 感興趣的課程 -->
+            <div class="mb-3">
+                <label for="" class="form-label">感興趣的課程(可複選)</label>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" class="form-check-input" id="chk01" value="HTML/CSS" name='interest'>
+                        <label for="chk01" class="form-check-label">HTML/CSS</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" class="form-check-input" id="chk02" value="JavaScript" name='interest'>
+                        <label for="chk02" class="form-check-label">JavaScript</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" class="form-check-input" id="chk03" value="Python" name='interest'>
+                        <label for="chk03" class="form-check-label">Python</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" class="form-check-input" id="chk04" value="AI協作開發" name='interest'>
+                        <label for="chk04" class="form-check-label">AI協作開發</label>
+                    </div>
+                </div>
+                <div id="interest_msg" class="text-secondary">
+                    請至少選擇一項課程
+                </div>
+            </div>
+
+            <!-- radiobox 偏好的上課方式 -->
+            <div class="mb-3">
+                <label for="" class="form-label">偏好的上課方式(單選)</label>
+                <div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" id="rad01" value="實體課程" name='classMode'>
+                        <label for="rad01" class="form-check-label">實體課程</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" id="rad02" value="線上課程" name='classMode'>
+                        <label for="rad02" class="form-check-label">線上課程</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" id="rad03" value="混合" name='classMode'>
+                        <label for="rad03" class="form-check-label">混合</label>
+                    </div>
+                </div>
+                <div id="classMode_msg" class="text-secondary">
+                    請選擇上課方式
+                </div>
+            </div>
+
+            <!-- switch 課程通知 -->
+            <div class="mb-3">
+                <label for="" class="form-label">課程通知設定</label>
+                <div class="form-check form-switch">
+                    <input type="checkbox" class="form-check-input" id="switch01">
+                    <label for="switch01" class="form-check-label">是否接收課程通知</label>
+                </div>
+                <div id="switch_msg" class="text-secondary">
+                    目前狀態: 關閉
+                </div>
+            </div>
+
+            <!-- range  -->
+            <div class="mb-3">
+                <label for="" class="form-label">
+                    程式能力自我評估: <span class="text-primary" id="range_value"> 5 </span> 分
+                </label>
+                <input type="range" class="form-range" min="1" max="10" step="1" value="5" id="range01">
+                <!-- 將兩個span推到兩邊 -->
+                <div class="d-flex justify-content-between">
+                    <span class="text-secondary">1 - 完全不會</span>
+                    <span class="text-secondary">10 - 非常熟悉</span>
+                </div>
             </div>
 
             <div class="col-12 text-center mt-3">
@@ -89,6 +164,14 @@
         let flag_password = false;
         let flag_phone = false;
         let flag_city = false;
+        let flag_interest = false;
+        let flag_classMode = false;
+        // 新增空陣列來存放已勾選的項目, 宣告在外面其他監聽才能使用
+        let interest = [];
+        let classMode = '';
+        let switchStatus = false;
+        let rangeValue = 5;
+
         $(function () {
             // 即時監聽 username: 監聽對象.on(事件, 動作)
             $('#username').on('input', function () {
@@ -195,6 +278,78 @@
                 }
             });
 
+            // 監聽興趣課程按鈕
+            // 針對input中 name=interest的項目, 如果有改變就要執行
+            $('input[name="interest"]').on('change', function () {
+                interest = [];
+                // 將所有input中 name=interest 的已勾選checkbox, 存進interest這個陣列中
+                // checked: 已勾選的, 用:連接
+                // each(): 每一個被勾選的都要執行
+                // push(): 將括號中的資料塞入
+                $('input[name="interest"]:checked').each(function () {
+                    console.log($(this).val());
+                    interest.push($(this).val());
+                });
+                console.log(interest);
+
+                if (interest.length > 0) {
+                    // 至少有選一項
+                    flag_interest = true;
+                    // 可針對同個id作多個動作, 要依照執行順序
+                    $('#interest_msg')
+                        .removeClass('text-secordary text-danger')
+                        .addClass('text-success')
+                        .text('已選擇 ' + interest.length + ' 項課程');
+                } else {
+                    // 未選擇任何課程
+                    flag_interest = false;
+                    $('#interest_msg')
+                        .removeClass('text-secordary text-success')
+                        .addClass('text-danger')
+                        .text('請至少選擇一項課程');
+                };
+            });
+
+            // 監聽上課方式
+            $('input[name="classMode"]').on('change', function () {
+                classMode = $('input[name="classMode"]:checked').val();
+                if (classMode) {
+                    // 已選擇上課方式                    
+                    flag_classMode = true;
+                    $('#classMode_msg')
+                        .removeClass('text-secondary')
+                        .addClass('text-success')
+                        .text('已選擇: ' + classMode);
+                }
+            });
+
+            // 監聽課程通知
+            $('#switch01').on('change', function () {
+                // prop('checked'): 判斷是否有打勾
+                console.log($(this).prop('checked'))
+                switchStatus = $(this).prop('checked')
+                if (switchStatus) {
+                    // 目前狀態: 開啟
+                    $('#switch_msg')
+                        .removeClass('text-secordary')
+                        .addClass('text-success')
+                        .text('目前狀態: 開啟');
+                } else {
+                    // 目前狀態: 關閉
+                    $('#switch_msg')
+                        .removeClass('text-success')
+                        .addClass('text-secordary')
+                        .text('目前狀態: 關閉');
+                }
+            });
+
+            // 監聽程式能力
+            $('#range01').on('input', function(){
+                console.log($(this).val());
+                rangeValue = $(this).val();
+                $('#range_value').text(rangeValue);
+            });
+
             // 監聽確認送出按鈕 #ok_btn
             $('#ok_btn').on('click', function () {
                 // 簡化語法: 布林值不用寫 '== true', 他本身就是true/false
@@ -204,19 +359,33 @@
                 console.log('password:' + flag_password);
                 console.log('phone:' + flag_phone);
                 console.log('city:' + flag_city);
-                if (flag_username && flag_email && flag_password && flag_phone && flag_city) {
+                console.log('interest:' + interest);
+                console.log('classMode:' + classMode);
+                if (flag_username && flag_email && flag_password && flag_phone && flag_city && flag_interest && flag_classMode) {
                     console.log('click ok_btn: 符合規定');
+
+                    let switch_msg = '';
+                    if (switchStatus) {
+                        switch_msg = '開啟';
+                    } else {
+                        switch_msg = '關閉';
+                    }
+
+                    // join(', '): 將陣列用', '隔開
                     const strHTML = `<div class="h5">姓名: ${$('#username').val()}</div>
                                      <div class="h5">Email: ${$('#email').val()}</div>
                                      <div class="h5">密碼: xxxxxxxx </div>
                                      <div class="h5">手機: ${$('#phone').val()}</div>
-                                     <div class="h5">居住地: ${$('#city').val()}</div>`;
+                                     <div class="h5">居住地: ${$('#city').val()}</div>
+                                     <div class="h5">感興趣的課程: ${interest.join(', ')} </div>
+                                     <div class="h5">偏好的上課方式: ${classMode} </div>
+                                     <div class="h5">課程通知: ${switch_msg} </div>
+                                     <div class="h5">程式能力自我評估: ${rangeValue} 分</div>`;
                     $('#showmsg').html(strHTML);
                 } else {
                     console.log('click ok_btn: 不符合規定');
                     alert('不符合輸入規定!');
                 }
-
             })
         });
 
