@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 輔助全端程式設計師養成班 - 線上報名系統 (教學模擬版)</title>
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <!-- FontAwesome 圖示 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    
+    <style>
+        /* ==========================================================================
+           品牌視覺風格與 CSS :root 色彩變數設定 (巨匠/企業綠色調)
+           ========================================================================== */
+        :root {
+            --brand-primary: #0b6b3a;       /* 企業深綠主色 */
+            --brand-primary-hover: #08522c; /* 深綠 Hover 狀態 */
+            --brand-accent: #198754;        /* 亮綠點綴色 */
+            --brand-light: #f0fdf4;         /* 淺綠背景 Accent */
+            --brand-bg: #f8f9fa;            /* 頁面整體底色 */
+            --text-main: #2b3035;           /* 主要文字顏色 */
+            --text-muted: #6c757d;          /* 次要文字顏色 */
+            --card-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            background-color: var(--brand-bg);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+        }
+
+        /* 導覽列風格 */
+        .navbar-brand-custom {
+            font-weight: 700;
+            color: var(--brand-primary);
+            font-size: 1.4rem;
+        }
+        
+        .bg-brand-primary {
+            background-color: var(--brand-primary) !important;
+        }
+
+        /* Hero Banner 風格 */
+        .hero-banner {
+            background: linear-gradient(135deg, #0b6b3a 0%, #198754 100%);
+            color: white;
+            border-radius: 1rem;
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 0.75rem 2rem rgba(11, 107, 58, 0.2);
+        }
+
+        /* 卡片與區塊容器 */
+        .custom-card {
+            background: #ffffff;
+            border: none;
+            border-radius: 1rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .card-header-custom {
+            background-color: transparent;
+            border-bottom: 2px solid var(--brand-light);
+            padding: 1.25rem 1.5rem;
+        }
+
+        /* 按鈕風格強化 */
+        .btn-brand-primary {
+            background-color: var(--brand-primary);
+            color: #ffffff;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-brand-primary:hover {
+            background-color: var(--brand-primary-hover);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        /* Form 開關與控制元件顏色客製化 */
+        .form-check-input:checked {
+            background-color: var(--brand-primary);
+            border-color: var(--brand-primary);
+        }
+
+        .form-range::-webkit-slider-thumb {
+            background: var(--brand-primary);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--brand-accent);
+            box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+        }
+
+        /* 報名確認顯示區塊 */
+        .summary-box {
+            background-color: var(--brand-light);
+            border: 1px solid rgba(25, 135, 84, 0.2);
+            border-radius: 0.75rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 1. 頂部導覽列 (Navbar) -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand navbar-brand-custom d-flex align-items-center gap-2" href="#">
+                <i class="fa-solid me-1 fa-code text-success"></i> G-DESIGN 職訓學院
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto ms-3">
+                    <li class="nav-item"><a class="nav-link active" href="#form-section">線上報名</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#features-section">課程大綱</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#teacher-section">師資介紹</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#faq-section">常見問題</a></li>
+                </ul>
+                <a href="#form-section" class="btn btn-brand-primary ms-lg-2">
+                    <i class="fa-regular fa-paper-plane me-1"></i> 立即免費諮詢
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主內容區塊 -->
+    <div class="container my-4">
+        
+        <!-- 2. AI 課程主視覺 Banner (Hero Section) -->
+        <div class="hero-banner text-center text-lg-start">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <span class="badge bg-light text-success fw-bold px-3 py-2 mb-3 rounded-pill">
+                        <i class="fa-solid fa-wand-magic-sparkles me-1"></i> 2026 前端/全端熱門實務課程
+                    </span>
+                    <h1 class="display-5 fw-bold mb-3">AI 輔助全端程式設計師養成班</h1>
+                    <p class="lead mb-4 opacity-90">
+                        掌握 HTML5、CSS3、JavaScript、jQuery 與 AJAX 前端技術，搭配生成式 AI 工具協作開發，打造跨平台高品質商業網站！
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+                        <a href="#form-section" class="btn btn-light btn-lg text-success fw-bold shadow-sm px-4">
+                            線上預約報名
+                        </a>
+                        <a href="#features-section" class="btn btn-outline-light btn-lg px-4">
+                            了解詳細課程
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 d-none d-lg-block text-center">
+                    <i class="fa-solid fa-laptop-code display-1 opacity-75"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. 雙欄桌面排版 (Grid layout) -->
+        <div class="row g-4" id="form-section">
+            
+            <!-- 左側 (col-lg-8)：線上報名表單 -->
+            <div class="col-lg-8">
+                <div class="custom-card">
+                    <div class="card-header-custom d-flex align-items-center justify-content-between">
+                        <h4 class="mb-0 fw-bold text-success">
+                            <i class="fa-solid fa-clipboard-list me-2"></i>課程線上報名表
+                        </h4>
+                        <span class="text-muted fs-6"><span class="text-danger">*</span> 為必填欄位</span>
+                    </div>
+                    
+                    <div class="card-body p-4">
+                        <form id="signupForm" novalidate>
+                            
+                            <!-- 姓名欄位 -->
+                            <div class="mb-4">
+                                <label for="username" class="form-label fw-semibold">
+                                    姓名 <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control form-control-lg" id="username" placeholder="請輸入姓名（長度限制 2-8 個字）">
+                                <div class="valid-feedback">姓名長度符合規定</div>
+                                <div class="invalid-feedback">姓名長度不符合規定 (須為 2 ~ 8 個字)</div>
+                            </div>
+
+                            <!-- Email 欄位 -->
+                            <div class="mb-4">
+                                <label for="email" class="form-label fw-semibold">
+                                    電子郵件 (Email) <span class="text-danger">*</span>
+                                </label>
+                                <input type="email" class="form-control form-control-lg" id="email" placeholder="example@mail.com">
+                                <div class="valid-feedback">Email 格式輸入正確</div>
+                                <div class="invalid-feedback">Email 格式不符合規定</div>
+                            </div>
+
+                            <!-- 密碼欄位 -->
+                            <div class="mb-4">
+                                <label for="password" class="form-label fw-semibold">
+                                    設定帳號密碼 <span class="text-danger">*</span>
+                                </label>
+                                <input type="password" class="form-control form-control-lg" id="password"
+                                    placeholder="包含大寫、小寫英文與數字，長度 8 至 20 字">
+                                <div class="valid-feedback">密碼強度符合規定</div>
+                                <div class="invalid-feedback">密碼必須包含至少一個大寫字母、一個小寫字母、一個數字，長度 8 至 20 個字元</div>
+                            </div>
+
+                            <!-- 手機欄位 -->
+                            <div class="mb-4">
+                                <label for="phone" class="form-label fw-semibold">
+                                    行動電話 <span class="text-danger">*</span>
+                                </label>
+                                <input type="tel" class="form-control form-control-lg" id="phone" placeholder="請輸入 10 碼手機號碼 (例如: 0912345678)">
+                                <div class="valid-feedback">手機號碼格式正確</div>
+                                <div class="invalid-feedback">手機號碼格式不符合規定 (須為 09 開頭共 10 位數字)</div>
+                            </div>
+
+                            <!-- 縣市下拉選單 (AJAX 異步載入) -->
+                            <div class="mb-4">
+                                <label for="city" class="form-label fw-semibold">
+                                    居住縣市 <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select form-select-lg" id="city">
+                                    <option value="" selected disabled>載入縣市資料中...</option>
+                                </select>
+                                <div class="valid-feedback">已選擇居住縣市</div>
+                                <div class="invalid-feedback">請選擇居住縣市</div>
+                            </div>
+
+                            <!-- Checkbox: 感興趣的課程 -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">
+                                    感興趣的學習主題 (可複選) <span class="text-danger">*</span>
+                                </label>
+                                <div class="bg-light p-3 rounded-3 mb-2">
+                                    <div class="form-check form-check-inline me-4">
+                                        <input type="checkbox" class="form-check-input" id="chk01" value="HTML/CSS" name="interest">
+                                        <label for="chk01" class="form-check-label fw-normal">HTML/CSS 排版與 RWD</label>
+                                    </div>
+                                    <div class="form-check form-check-inline me-4">
+                                        <input type="checkbox" class="form-check-input" id="chk02" value="JavaScript" name="interest">
+                                        <label for="chk02" class="form-check-label fw-normal">JavaScript 程式邏輯</label>
+                                    </div>
+                                    <div class="form-check form-check-inline me-4">
+                                        <input type="checkbox" class="form-check-input" id="chk03" value="Python" name="interest">
+                                        <label for="chk03" class="form-check-label fw-normal">Python 數據開發</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input type="checkbox" class="form-check-input" id="chk04" value="AI協作開發" name="interest">
+                                        <label for="chk04" class="form-check-label fw-normal">AI 提示工程與協作</label>
+                                    </div>
+                                </div>
+                                <div id="interest_msg" class="form-text text-secondary">
+                                    <i class="fa-solid fa-circle-info me-1"></i> 請至少選擇一項感興趣的課程
+                                </div>
+                            </div>
+
+                            <!-- Radio: 偏好的上課方式 -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">
+                                    偏好的上課方式 (單選) <span class="text-danger">*</span>
+                                </label>
+                                <div class="bg-light p-3 rounded-3 mb-2">
+                                    <div class="form-check form-check-inline me-4">
+                                        <input type="radio" class="form-check-input" id="rad01" value="實體課程" name="classMode">
+                                        <label for="rad01" class="form-check-label fw-normal">實體面授班</label>
+                                    </div>
+                                    <div class="form-check form-check-inline me-4">
+                                        <input type="radio" class="form-check-input" id="rad02" value="線上課程" name="classMode">
+                                        <label for="rad02" class="form-check-label fw-normal">線上直播同步班</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" class="form-check-input" id="rad03" value="混合" name="classMode">
+                                        <label for="rad03" class="form-check-label fw-normal">雙軌混合學習</label>
+                                    </div>
+                                </div>
+                                <div id="classMode_msg" class="form-text text-secondary">
+                                    <i class="fa-solid fa-circle-info me-1"></i> 請選擇上課方式
+                                </div>
+                            </div>
+
+                            <!-- Switch: 課程通知 -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">最新優惠與課程通知</label>
+                                <div class="form-check form-switch fs-5">
+                                    <input type="checkbox" class="form-check-input" id="switch01">
+                                    <label for="switch01" class="form-check-label fs-6 align-middle">訂閱最新開課資訊與折扣活動</label>
+                                </div>
+                                <div id="switch_msg" class="form-text text-secondary">
+                                    目前狀態: 關閉
+                                </div>
+                            </div>
+
+                            <!-- Range: 程式能力自我評估 -->
+                            <div class="mb-4">
+                                <label for="range01" class="form-label fw-semibold">
+                                    程式基礎自我評估: 
+                                    <span class="badge bg-success fs-6 ms-1" id="range_value">5</span> 分
+                                </label>
+                                <input type="range" class="form-range" min="1" max="10" step="1" value="5" id="range01">
+                                <div class="d-flex justify-content-between text-muted fs-7">
+                                    <span>1 - 完全初學者</span>
+                                    <span>5 - 略懂基本語法</span>
+                                    <span>10 - 能獨立開發大專案</span>
+                                </div>
+                            </div>
+
+                            <!-- 表單按鈕區 -->
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-5">
+                                <button type="button" class="btn btn-brand-primary btn-lg px-5 shadow-sm me-md-2" id="ok_btn">
+                                    <i class="fa-solid fa-check me-1"></i> 確認送出報名
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary btn-lg px-4" id="reset_btn">
+                                    <i class="fa-solid fa-rotate-left me-1"></i> 重新填寫
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 報名資料確認顯示區塊 -->
+                <div class="row mt-4 d-none" id="summary_row">
+                    <div class="col-12">
+                        <div class="custom-card p-4 summary-box">
+                            <h4 class="fw-bold text-success border-bottom pb-2 mb-3">
+                                <i class="fa-solid fa-square-check me-2"></i>報名資料確認
+                            </h4>
+                            <div id="showmsg" class="lh-lg"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右側 (col-lg-4)：課程特色、師資與注意事項 Card -->
+            <div class="col-lg-4">
+                <div class="d-flex flex-column gap-4">
+                    
+                    <!-- 卡片 1: 四大課程核心特色 -->
+                    <div class="custom-card p-4" id="features-section">
+                        <h5 class="fw-bold text-success border-bottom pb-2 mb-3">
+                            <i class="fa-solid fa-star me-2"></i>四大獨家優勢
+                        </h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="d-flex mb-3">
+                                <i class="fa-solid fa-microchip text-success mt-1 me-3 fs-5"></i>
+                                <div>
+                                    <strong class="d-block">AI 協作倍增效率</strong>
+                                    <small class="text-muted">學習與 AI 工具共創 Code，縮短 50% 開發時程。</small>
+                                </div>
+                            </li>
+                            <li class="d-flex mb-3">
+                                <i class="fa-solid fa-layer-group text-success mt-1 me-3 fs-5"></i>
+                                <div>
+                                    <strong class="d-block">全端實務技能覆蓋</strong>
+                                    <strong class="d-block text-muted fw-normal">語法、網頁排版、動態互動至 API 串接一氣呵成。</strong>
+                                </div>
+                            </li>
+                            <li class="d-flex mb-3">
+                                <i class="fa-solid fa-user-tie text-success mt-1 me-3 fs-5"></i>
+                                <div>
+                                    <strong class="d-block">業界資深講師親授</strong>
+                                    <small class="text-muted">十年以上專案開發經驗手把手解惑導師。</small>
+                                </div>
+                            </li>
+                            <li class="d-flex">
+                                <i class="fa-solid fa-briefcase text-success mt-1 me-3 fs-5"></i>
+                                <div>
+                                    <strong class="d-block">就業輔導與作品集</strong>
+                                    <small class="text-muted">輔導製作商業級實務作品集，精準媒合就業。</small>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 卡片 2: 獨家師資團隊與說明 -->
+                    <div class="custom-card p-4" id="teacher-section">
+                        <h5 class="fw-bold text-success border-bottom pb-2 mb-3">
+                            <i class="fa-solid fa-chalkboard-user me-2"></i>專業導師團隊
+                        </h5>
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold fs-4" style="width: 50px; height: 50px;">
+                                Tech
+                            </div>
+                            <div>
+                                <h6 class="mb-0 fw-bold">全端開發團隊</h6>
+                                <small class="text-muted">跨國企業資深技術顧問群</small>
+                            </div>
+                        </div>
+                        <p class="small text-muted mb-0">
+                            課程內容針對企業實際職缺需求規劃，告別紙上談兵，實作導向確保學員具備獨立解題能力。
+                        </p>
+                    </div>
+
+                    <!-- 卡片 3: 報名注意事項 Card -->
+                    <div class="custom-card p-4 bg-light border" id="faq-section">
+                        <h6 class="fw-bold text-dark mb-2">
+                            <i class="fa-solid fa-triangle-exclamation text-warning me-2"></i>報名提醒與條款
+                        </h6>
+                        <ul class="small text-muted ps-3 mb-0">
+                            <li>請務必填寫真實且聯絡得上的手機與 Email。</li>
+                            <li>本頁面為教學實務模擬體驗，無寫入後端真實資料庫。</li>
+                            <li>完成報名後將有專人於 1~2 個工作天內聯繫諮詢。</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 4. 頁尾 (Footer) -->
+    <footer class="bg-dark text-white-50 py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-1 text-white fw-bold">G-DESIGN 企業教育訓練學院 (教學模擬版)</p>
+            <p class="small mb-0">
+                本網站為程式教學範例模擬網頁，不具備真實商業招生活動，所有商標屬原權利人所有。
+            </p>
+            <small class="text-muted">&copy; 2026 Educational Demo System. All Rights Reserved.</small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery 3.7.1 -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- JavaScript 表單互動與驗證邏輯 -->
+    <script>
+        // 驗證狀態 Flag 宣告
+        let flag_username = false;
+        let flag_email = false;
+        let flag_password = false;
+        let flag_phone = false;
+        let flag_city = false;
+        let flag_interest = false;
+        let flag_classMode = false;
+
+        // 表單資料暫存變數
+        let interest = [];
+        let classMode = '';
+        let switchStatus = false;
+        let rangeValue = 5;
+
+        // 防範 XSS 攻擊轉義函數 (安全防護)
+        function escapeHtml(text) {
+            if (typeof text !== 'string') return text;
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        $(function () {
+
+            // ------------------------------------------------------------------
+            // 1. 欄位監聽與 validation 驗證邏輯
+            // ------------------------------------------------------------------
+
+            // 監聽 姓名 (即時 input 驗證: 2-8 個字)
+            $('#username').on('input', function () {
+                let username = $(this).val().trim();
+                localStorage.setItem('form_username', username);
+
+                if (username.length >= 2 && username.length <= 8) {
+                    $(this).removeClass('is-invalid').addClass('is-valid');
+                    flag_username = true;
+                } else {
+                    $(this).removeClass('is-valid').addClass('is-invalid');
+                    flag_username = false;
+                }
+            });
+
+            // 監聽 Email (change 驗證: 符合標準信箱格式)
+            $('#email').on('change input', function () {
+                let email = $(this).val().trim();
+                localStorage.setItem('form_email', email);
+
+                let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                if (emailRegex.test(email)) {
+                    $(this).removeClass('is-invalid').addClass('is-valid');
+                    flag_email = true;
+                } else {
+                    $(this).removeClass('is-valid').addClass('is-invalid');
+                    flag_email = false;
+                }
+            });
+
+            // 監聽 密碼 (包含大小寫與數字，長度 8-20 字) -> 安全機制：絕不寫入 LocalStorage
+            $('#password').on('change input', function () {
+                let password = $(this).val();
+                const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
+
+                if (passwordRegex.test(password)) {
+                    $(this).removeClass('is-invalid').addClass('is-valid');
+                    flag_password = true;
+                } else {
+                    $(this).removeClass('is-valid').addClass('is-invalid');
+                    flag_password = false;
+                }
+            });
+
+            // 監聽 手機 (09開頭且長度10個字)
+            $('#phone').on('change input', function () {
+                let phone = $(this).val().trim();
+                localStorage.setItem('form_phone', phone);
+
+                let phoneRegex = /^09\d{8}$/;
+                if (phoneRegex.test(phone)) {
+                    $(this).removeClass('is-invalid').addClass('is-valid');
+                    flag_phone = true;
+                } else {
+                    $(this).removeClass('is-valid').addClass('is-invalid');
+                    flag_phone = false;
+                }
+            });
+
+            // 監聽 Checkbox (感興趣課程)
+            $('input[name="interest"]').on('change', function () {
+                interest = [];
+                $('input[name="interest"]:checked').each(function () {
+                    interest.push($(this).val());
+                });
+
+                // 寫入 LocalStorage 暫存 (JSON 格式)
+                localStorage.setItem('form_interest', JSON.stringify(interest));
+
+                if (interest.length > 0) {
+                    flag_interest = true;
+                    $('#interest_msg')
+                        .removeClass('text-secondary text-danger')
+                        .addClass('text-success')
+                        .html('<i class="fa-solid fa-circle-check me-1"></i>已選擇 ' + interest.length + ' 項課程');
+                } else {
+                    flag_interest = false;
+                    $('#interest_msg')
+                        .removeClass('text-secondary text-success')
+                        .addClass('text-danger')
+                        .html('<i class="fa-solid fa-circle-exclamation me-1"></i>請至少選擇一項課程');
+                }
+            });
+
+            // 監聽 Radio (上課方式)
+            $('input[name="classMode"]').on('change', function () {
+                classMode = $('input[name="classMode"]:checked').val();
+                localStorage.setItem('form_classMode', classMode);
+
+                if (classMode) {
+                    flag_classMode = true;
+                    $('#classMode_msg')
+                        .removeClass('text-secondary text-danger')
+                        .addClass('text-success')
+                        .html('<i class="fa-solid fa-circle-check me-1"></i>已選擇上課方式：' + escapeHtml(classMode));
+                }
+            });
+
+            // 監聽 Switch (課程通知開關)
+            $('#switch01').on('change', function () {
+                switchStatus = $(this).prop('checked');
+                localStorage.setItem('form_switchStatus', switchStatus);
+
+                if (switchStatus) {
+                    $('#switch_msg')
+                        .removeClass('text-secondary')
+                        .addClass('text-success')
+                        .text('目前狀態: 已訂閱資訊');
+                } else {
+                    $('#switch_msg')
+                        .removeClass('text-success')
+                        .addClass('text-secondary')
+                        .text('目前狀態: 關閉通知');
+                }
+            });
+
+            // 監聽 Range (程式能力自評)
+            $('#range01').on('input', function () {
+                rangeValue = $(this).val();
+                localStorage.setItem('form_rangeValue', rangeValue);
+                $('#range_value').text(rangeValue);
+            });
+
+            // ------------------------------------------------------------------
+            // 2. 縣市下拉選單載入 (AJAX / 備用資料載入與還原)
+            // ------------------------------------------------------------------
+
+            // 縣市清單模擬資料
+            const cityDataFallback = [
+                { CityName: "臺北市" }, { CityName: "新北市" }, { CityName: "基隆市" },
+                { CityName: "桃園市" }, { CityName: "新竹市" }, { CityName: "新竹縣" },
+                { CityName: "苗栗縣" }, { CityName: "臺中市" }, { CityName: "彰化縣" },
+                { CityName: "南投縣" }, { CityName: "雲林縣" }, { CityName: "嘉義市" },
+                { CityName: "嘉義縣" }, { CityName: "臺南市" }, { CityName: "高雄市" },
+                { CityName: "屏東縣" }, { CityName: "宜蘭縣" }, { CityName: "花蓮縣" },
+                { CityName: "臺東縣" }, { CityName: "澎湖縣" }, { CityName: "金門縣 text-center" }
+            ];
+
+            // 試圖透過 AJAX 讀取 JSON
+            $.ajax({
+                type: 'GET',
+                url: 'js/json/CityCountyData.json',
+                dataType: 'JSON',
+                success: function (data) {
+                    renderCityOptions(data);
+                },
+                error: function () {
+                    // 若無外部 JSON 檔案則自動容錯使用備用縣市資料
+                    renderCityOptions(cityDataFallback);
+                }
+            });
+
+            function renderCityOptions(data) {
+                $('#city').empty().append(`<option value="" selected disabled>請選擇居住縣市</option>`);
+                data.forEach(function (item) {
+                    $('#city').append(`<option value="${item.CityName}">${item.CityName}</option>`);
+                });
+
+                // 監聽縣市選單變更
+                $('#city').on('change', function () {
+                    let selectedCity = $(this).val();
+                    localStorage.setItem('form_city', selectedCity);
+                    if (selectedCity) {
+                        $(this).removeClass('is-invalid').addClass('is-valid');
+                        flag_city = true;
+                    } else {
+                        $(this).removeClass('is-valid').addClass('is-invalid');
+                        flag_city = false;
+                    }
+                });
+
+                // 縣市選單渲染完畢後還原草稿
+                restoreSavedCity();
+            }
+
+            // ------------------------------------------------------------------
+            // 3. 頁面自動還原 LocalStorage 草稿資料
+            // ------------------------------------------------------------------
+
+            // 還原姓名
+            let savedUsername = localStorage.getItem('form_username');
+            if (savedUsername) {
+                $('#username').val(savedUsername).trigger('input');
+            }
+
+            // 還原 Email
+            let savedEmail = localStorage.getItem('form_email');
+            if (savedEmail) {
+                $('#email').val(savedEmail).trigger('change');
+            }
+
+            // 還原 手機
+            let savedPhone = localStorage.getItem('form_phone');
+            if (savedPhone) {
+                $('#phone').val(savedPhone).trigger('change');
+            }
+
+            // 還原 Checkbox 興趣
+            let savedInterest = localStorage.getItem('form_interest');
+            if (savedInterest) {
+                try {
+                    let interestArr = JSON.parse(savedInterest);
+                    if (Array.isArray(interestArr)) {
+                        interestArr.forEach(val => {
+                            $(`input[name="interest"][value="${val}"]`).prop('checked', true);
+                        });
+                        $('input[name="interest"]').first().trigger('change');
+                    }
+                } catch (e) {
+                    console.error('還原興趣選項解析錯誤', e);
+                }
+            }
+
+            // 還原 Radio 上課方式
+            let savedClassMode = localStorage.getItem('form_classMode');
+            if (savedClassMode) {
+                $(`input[name="classMode"][value="${savedClassMode}"]`).prop('checked', true).trigger('change');
+            }
+
+            // 還原 Switch 通知狀態
+            let savedSwitchStatus = localStorage.getItem('form_switchStatus');
+            if (savedSwitchStatus !== null) {
+                let isChecked = (savedSwitchStatus === 'true');
+                $('#switch01').prop('checked', isChecked).trigger('change');
+            }
+
+            // 還原 Range 能力值
+            let savedRangeValue = localStorage.getItem('form_rangeValue');
+            if (savedRangeValue) {
+                $('#range01').val(savedRangeValue).trigger('input');
+            }
+
+            // 異步還原縣市選單
+            function restoreSavedCity() {
+                let savedCity = localStorage.getItem('form_city');
+                if (savedCity) {
+                    $('#city').val(savedCity).trigger('change');
+                }
+            }
+
+            // ------------------------------------------------------------------
+            // 4. 按鈕事件處理 (確認送出 / 重新填寫)
+            // ------------------------------------------------------------------
+
+            // 點擊「確認送出」按鈕
+            $('#ok_btn').on('click', function () {
+                // 手動觸發一次相關欄位評估以更新 validation 狀態
+                if (!flag_username) $('#username').trigger('input');
+                if (!flag_email) $('#email').trigger('change');
+                if (!flag_password) $('#password').trigger('change');
+                if (!flag_phone) $('#phone').trigger('change');
+                if (!flag_city) $('#city').trigger('change');
+                if (!flag_interest) $('input[name="interest"]').first().trigger('change');
+                if (!flag_classMode) $('input[name="classMode"]').first().trigger('change');
+
+                // 驗證全數通過
+                if (flag_username && flag_email && flag_password && flag_phone && flag_city && flag_interest && flag_classMode) {
+                    
+                    let switch_msg = switchStatus ? '已開啟訂閱' : '未開啟訂閱';
+
+                    // 安全組合 HTML 內容 (避免 XSS)
+                    const strHTML = `
+                        <div class="row g-2">
+                            <div class="col-md-6"><strong>姓名：</strong> ${escapeHtml($('#username').val())}</div>
+                            <div class="col-md-6"><strong>Email：</strong> ${escapeHtml($('#email').val())}</div>
+                            <div class="col-md-6"><strong>密碼：</strong> <span class="text-muted">xxxxxxxx (已加密防護)</span></div>
+                            <div class="col-md-6"><strong>手機：</strong> ${escapeHtml($('#phone').val())}</div>
+                            <div class="col-md-6"><strong>居住縣市：</strong> ${escapeHtml($('#city').val())}</div>
+                            <div class="col-md-6"><strong>偏好上課方式：</strong> ${escapeHtml(classMode)}</div>
+                            <div class="col-12"><strong>感興趣課程：</strong> ${escapeHtml(interest.join(', '))}</div>
+                            <div class="col-md-6"><strong>課程通知：</strong> ${switch_msg}</div>
+                            <div class="col-md-6"><strong>程式能力自評：</strong> ${rangeValue} 分</div>
+                        </div>`;
+
+                    $('#showmsg').html(strHTML);
+                    $('#summary_row').removeClass('d-none');
+
+                    // 捲動到確認區域
+                    $('html, body').animate({
+                        scrollTop: $("#summary_row").offset().top - 100
+                    }, 400);
+
+                    // 彈出成功 Alert
+                    Swal.fire({
+                        title: "報名成功！",
+                        text: "我們已收到您的報名資訊，將有專人與您聯繫！",
+                        icon: "success",
+                        confirmButtonColor: "#0b6b3a"
+                    });
+
+                    // 清除 LocalStorage 暫存
+                    clearFormLocalStorage();
+
+                } else {
+                    // 驗證失敗警告
+                    Swal.fire({
+                        title: "表單內容輸入有誤",
+                        text: "請檢查標示為紅色的欄位並修正後再試。",
+                        icon: "error",
+                        confirmButtonColor: "#d33"
+                    });
+                }
+            });
+
+            // 點擊「重新填寫」按鈕
+            $('#reset_btn').on('click', function () {
+                Swal.fire({
+                    title: "確定要重新填寫嗎？",
+                    text: "所有未送出的填寫內容與草稿將被清除。",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#0b6b3a",
+                    cancelButtonColor: "#6c757d",
+                    confirmButtonText: "確定重置",
+                    cancelButtonText: "取消"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        clearFormLocalStorage();
+                        location.reload();
+                    }
+                });
+            });
+
+        });
+
+        // 刪除該表單專屬 LocalStorage 草稿
+        function clearFormLocalStorage() {
+            localStorage.removeItem('form_username');
+            localStorage.removeItem('form_email');
+            localStorage.removeItem('form_phone');
+            localStorage.removeItem('form_city');
+            localStorage.removeItem('form_interest');
+            localStorage.removeItem('form_classMode');
+            localStorage.removeItem('form_switchStatus');
+            localStorage.removeItem('form_rangeValue');
+        }
+    </script>
+</body>
+
+</html>

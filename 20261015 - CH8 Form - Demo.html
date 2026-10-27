@@ -142,7 +142,7 @@
 
             <div class="col-12 text-center mt-3">
                 <button class="btn text-bg-success" id="ok_btn">確認送出</button>
-                <button class="btn text-bg-secondary">重新填寫</button>
+                <button class="btn text-bg-secondary" id="reset_btn">重新填寫</button>
             </div>
         </div>
 
@@ -158,6 +158,7 @@
 
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/jquery-4.0.0.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         let flag_username = false;  // 布林值, 紀錄username是否符合規定
         let flag_email = false;
@@ -175,20 +176,25 @@
         $(function () {
             // 即時監聽 username: 監聽對象.on(事件, 動作)
             $('#username').on('input', function () {
+                // LocalStorage 即時儲存
+                // setItem(key, value): 儲存
+                let username = $(this).val();
+                localStorage.setItem('username', username);
+
                 // console.log($("#username").val());
                 // val(): 取得值, this: 表當下這個事件 = #username
                 // length: 長度
                 // console.log('input:' + $(this).val() + ' length: ' + $(this).val().length);
-                if ($(this).val().length > 1 && $(this).val().length < 9) {
+                if (username.length > 1 && username.length < 9) {
                     // 符合規定:2-8個字
-                    console.log('符合規定');
+                    // console.log('username: 符合規定');
                     // 先刪除is-invaild, 再加入is-valid, 避免同時出現
                     $(this).removeClass('is-invalid');
                     $(this).addClass('is-valid');
                     flag_username = true;
                 } else {
                     // 不符合規定
-                    console.log('不符合規定');
+                    // console.log('username: 不符合規定');
                     $(this).removeClass('is-valid');
                     $(this).addClass('is-invalid');
                     flag_username = false;
@@ -206,19 +212,20 @@
                 // 簡化語法: 將$(this).val()存在email
                 // if ($(this).val().length > 7 && $(this).val().length < 16 && $(this).val().includes('@')) {
                 let email = $(this).val();
-                console.log('email:' + email);
+                // console.log('email:' + email);
+                localStorage.setItem('email', email);
 
                 // Email 正規表達式：符合標準信箱格式（含帳號、@、網域與頂級網域）
                 let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                 if (emailRegex.test(email)) {
                     // if (email.length > 7 && email.length < 16 && email.includes('@')) {
-                    console.log('email ok');
+                    // console.log('email ok');
                     $(this).removeClass('is-invalid');
                     $(this).addClass('is-valid');
                     flag_email = true;
                 }
                 else {
-                    console.log('email error')
+                    // console.log('email error')
                     $(this).removeClass('is-valid');
                     $(this).addClass('is-invalid');
                     flag_email = false;
@@ -253,14 +260,16 @@
                 // if ($(this).val().length == 10 && $(this).val().startsWith('09')) {
                 let phone = $(this).val();
                 console.log('phone: ' + phone);
+                localStorage.setItem('phone', phone);
+
                 // startsWith('09'): 判斷開頭是否為09
                 if (phone.length == 10 && phone.startsWith('09')) {
-                    console.log('phone ok');
+                    // console.log('phone ok');
                     $(this).removeClass('is-invalid');
                     $(this).addClass('is-valid');
                     flag_phone = true;
                 } else {
-                    console.log('phone error');
+                    // console.log('phone error');
                     $(this).removeClass('is-valid');
                     $(this).addClass('is-invalid');
                     flag_phone = false;
@@ -344,25 +353,40 @@
             });
 
             // 監聽程式能力
-            $('#range01').on('input', function(){
+            $('#range01').on('input', function () {
                 console.log($(this).val());
                 rangeValue = $(this).val();
                 $('#range_value').text(rangeValue);
             });
 
+            // 網頁重新載入時, 取得先前儲存的欄位
+            let savedUsername = localStorage.getItem('username');
+            if (savedUsername != null) {
+                $('#username').val(savedUsername);
+
+                // 執行驗證
+                $('#username').trigger('input');
+            }
+
+            let savedEmail = localStorage.getItem('email');
+            if (savedEmail != null) {
+                $('#email').val(savedEmail);
+                $('#email').trigger('change');
+            }
+
+            let savedPhone = localStorage.getItem('phone');
+            if (savedPhone != null) {
+                $('#phone').val(savedPhone);
+                $('#phone').trigger('change');
+            }
+
+
             // 監聽確認送出按鈕 #ok_btn
             $('#ok_btn').on('click', function () {
                 // 簡化語法: 布林值不用寫 '== true', 他本身就是true/false
                 // if (flag_username == true && flag_email == true && flag_password == true && flag_phone == true) {
-                console.log('username:' + flag_username);
-                console.log('email:' + flag_email);
-                console.log('password:' + flag_password);
-                console.log('phone:' + flag_phone);
-                console.log('city:' + flag_city);
-                console.log('interest:' + interest);
-                console.log('classMode:' + classMode);
                 if (flag_username && flag_email && flag_password && flag_phone && flag_city && flag_interest && flag_classMode) {
-                    console.log('click ok_btn: 符合規定');
+                    // console.log('click ok_btn: 符合規定');
 
                     let switch_msg = '';
                     if (switchStatus) {
@@ -382,31 +406,66 @@
                                      <div class="h5">課程通知: ${switch_msg} </div>
                                      <div class="h5">程式能力自我評估: ${rangeValue} 分</div>`;
                     $('#showmsg').html(strHTML);
+
+                    Swal.fire("資料送出成功");
+                    // 清除localStorage
+                    clearLocalStorage();
                 } else {
-                    console.log('click ok_btn: 不符合規定');
-                    alert('不符合輸入規定!');
+                    // console.log('click ok_btn: 不符合規定');
+                    // alert('不符合輸入規定!');
+                    // 改用sweetalert2: 美觀的彈出式對話框, script要記得呼叫
+                    // 用範例 A dialog with three buttons 調整內容
+                    Swal.fire({
+                        title: "表單內容輸入有誤,請修正",
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        confirmButtonText: "確認",
+                        denyButtonText: `Don't save`,
+                        icon: 'error'
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            // 重整畫面: 自己連自己
+                            location.href = '20261015 - CH8 Form - Demo.html'
+                        };
+                    });
                 }
-            })
+            });
+
+            // 監聽重新填寫按鈕
+            $('#reset_btn').on('click', function () {
+                // 清空localStorage
+                clearLocalStorage();
+                // 重整頁面: 重新載入
+                location.reload();
+            });
         });
 
         function showdata_city(data) {
-            console.log(data);
+            // console.log(data);
             $('#city').empty();
             $('#city').append(`<option value="" selected disabled class="text-center">請選擇縣市名稱</option>`);
             data.forEach(function (item) {
-                console.log(item.CityName);
+                // console.log(item.CityName);
                 const strHTML = `<option value="${item.CityName}">${item.CityName}</option>`;
                 $('#city').append(strHTML);
             });
 
             // 監聽城市選單
             $('#city').on('change', function () {
-                console.log('city change');
+                // console.log('city change');
                 $(this).removeClass('is-invalid');
                 $(this).addClass('is-valid');
                 flag_city = true;
             });
         };
+
+        // 刪除網頁暫存 localStorage
+        function clearLocalStorage() {
+            localStorage.removeItem('username');
+            localStorage.removeItem('email');
+            localStorage.removeItem('phone');
+        }
     </script>
 
 </body>
