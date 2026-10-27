@@ -52,6 +52,100 @@
             transform: translateX(-50%);
         }
 
+        
+
+        /* roller-l: 動畫從左方進入 */
+        .roller-l {
+            position: relative;
+            /* 溢位不顯示, 當rollerbox超出roller容器時不顯示 */
+            overflow: hidden;
+        }
+
+        .roller-l .rollerbox-l {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            transform: translateX(-100%);
+            /* 動畫時間1S */
+            transition: transform 1s;
+            /* 垂直水平置中 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .roller-l:hover .rollerbox-l {
+            /* 當滑鼠停到roller時, rollerbox要歸位 */
+            transform: translateX(0);
+        }
+
+        /* roller-r: 動畫從右方進入 */
+        .roller-r {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .roller-r .rollerbox-r {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            transform: translateX(100%);
+            transition: transform 1s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .roller-r:hover .rollerbox-r {
+            transform: translateX(0);
+        }
+
+        /* roller-t: 動畫從上方進入 */
+        .roller-t {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .roller-t .rollerbox-t {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            transform: translateY(-100%);
+            transition: transform 1s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .roller-t:hover .rollerbox-t {
+            transform: translateY(0);
+        }
+
+        /* roller-b: 動畫從下方進入 */
+        .roller-b {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .roller-b .rollerbox-b {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            transform: translateY(100%);
+            transition: transform 1s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .roller-b:hover .rollerbox-b {
+            transform: translateY(0);
+        }
+
         @media screen and (max-width: 768px) {
             /* 多個一起呼叫用","隔開 */
             /* .timeline-section::before, .timeline-section-pointer::before{
