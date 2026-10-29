@@ -8,25 +8,796 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/all.min.css">
     <link rel="stylesheet" href="css/myall.css">
+    <style>
+        :root {
+            /* 1. 主色系：療癒森系綠 */
+            --primary: #5C7665;
+            --primary-hover: #4A5F52;
+            --primary-light: #EBF0EC;
+
+            /* 2. 強調色：溫暖珊瑚橘 */
+            --accent: #E07A5F;
+            --accent-hover: #CC694E;
+            --accent-light: #FDF1ED;
+            --accent-dark: #B85B40;
+
+            /* 3. 背景與表面色：溫潤米白與灰綠底色 */
+            --bg-color: #F9F8F6;
+            --surface-color: #FFFFFF;
+            --surface-alt: #F2F5F3;
+
+            /* 4. 文字色：深灰褐與柔和灰 */
+            --text-main: #2C3531;
+            --text-muted: #737A76;
+
+            /* 5. Section 03 輪播圖專屬顏色參數 */
+            --carousel-card-bg: rgba(44, 53, 49, 0.88);
+            --carousel-card-bg-mobile: rgba(44, 53, 49, 0.94);
+
+            /* 6. 邊框、陰影與共用屬性 */
+            --border-color: #E2E8F0;
+            --shadow-sm: 0 4px 6px -1px rgba(92, 118, 101, 0.06);
+            --shadow-md: 0 10px 20px -3px rgba(92, 118, 101, 0.1);
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-full: 50px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background-color: var(--bg-color);
+        }
+
+        /* ==========================================
+           Section 03 輪播圖樣式優化 (精簡版)
+           ========================================== */
+
+        /* 電腦版：左側懸浮卡片主體樣式 */
+        #s03 .carousel-caption-left {
+            /* 絕對定位，讓這張卡片脫離一般文件流，直接浮動在輪播圖的圖片上方。 */
+            position: absolute;
+            /* 讓卡片固定距離幻燈片左側邊緣 8% 的位置 */
+            left: 8%;
+            right: auto;
+            /* 設定卡片距離底部 15% 向上浮動。
+               同時將 top 設為 auto、transform 歸零，確保電腦版的位置是以底部向上計算、穩定對齊。 */
+            bottom: 15%;
+            top: auto;
+            transform: none;
+            /* 設定卡片的最大寬度為 580px。避免在大螢幕或超寬螢幕上，文字被拉得太長而影響閱讀舒適度。 */
+            max-width: 580px;
+            background-color: var(--carousel-card-bg);
+            border-left: 6px solid var(--accent);
+            border-top: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-sm);
+            padding: 2.5rem;
+            margin: 0;
+        }
+
+        /* 電腦版：標題文字大小與間距 */
+        #s03 .carousel-caption-left h4 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+        }
+
+        /* 電腦版：條列清單文字大小與間距 */
+        #s03 .carousel-caption-left li {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Section 05 工作信念樣式優化 (4欄版) */
+
+        /* 信念卡片外觀、圓角與陰影設定 */
+        .belief-card {
+            background-color: var(--surface-color);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        /* 滑鼠懸停時卡片立體浮動特效 */
+        .belief-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-light);
+        }
+
+        /* 圖標背景圓圈外框容器（4欄尺寸微調為 65px） */
+        .belief-card .icon-box {
+            width: 65px;
+            height: 65px;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        /* 滑鼠懸停卡片時，圖標顏色與背景切換為強調色（珊瑚橘） */
+        .belief-card:hover .icon-box {
+            background-color: var(--accent-light);
+            color: var(--accent);
+        }
+
+        /* 內容段落字體大小與行距優化 */
+        .belief-card p {
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        /* 電腦版（寬度大於 768px）：啟用絕對定位，讓圖片靠右滿版對齊 */
+        @media (min-width: 768px) {
+            #s06 .about-img {
+                position: absolute !important;
+                top: 0;
+                bottom: 0;
+                width: 41.666667%;
+                /* 對應 col-md-5 的寬度比例 */
+                min-height: 100%;
+            }
+        }
+
+        /* RWD 響應式：手機版（小於 768px）樣式調整 */
+        @media (max-width: 768px) {
+
+            /* 手機版：縮小幻燈片圖片高度 (可依需求調整為 50vh 或 380px) */
+            #s03 .carousel-item {
+                height: 55vh !important;
+            }
+
+            /* 手機版：卡片改為定位於畫面中間偏下 */
+            #s03 .carousel-caption-left {
+                left: 5%;
+                right: 5%;
+                max-width: 90%;
+                margin: 0 auto;
+                background-color: var(--carousel-card-bg-mobile);
+                border-left: 5px solid var(--accent);
+                padding: 1.2rem;
+            }
+
+            /* 手機版：標題字體縮小 */
+            #s03 .carousel-caption-left h4 {
+                font-size: 1.1rem;
+                margin-bottom: 0.5rem;
+            }
+
+            /* 手機版：條列清單字體縮小 */
+            #s03 .carousel-caption-left li {
+                font-size: 0.85rem;
+                margin-bottom: 0.4rem;
+            }
+
+            /* 取消絕對定位，改為上下堆疊避免遮擋文字 */
+            #s06 .about-img {
+                position: relative !important;
+                width: 100%;
+                height: 280px;
+                /* 手機版圖片固定高度 */
+            }
+        }
+    </style>
 </head>
 
 <body>
     <!-- section 01 社群連結 -->
-    <section id="s01" class="bg-secondary">
-        <div class="container py-2">
+    <section id="s01" style="background-color: var(--primary);"">
+        <div class=" container py-2">
+        <div class="row">
+            <div class="text-end">
+                <!-- 引用 Font Awesome 的圖示 -->
+                <a href="#"><i class="fa-brands fa-instagram fa-2x text-light"></i></a>
+                <a href="#"><i class="fa-brands fa-facebook-square fa-2x text-light"></i></a>
+                <a href="#"><i class="fa-brands fa-line fa-2x text-light"></i></a>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- section 02 選單 navbar + model -->
+    <section id="02">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg bg-light">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#"><i class="fa-solid fa-paw fa-2x"></i></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#">
+                                    <i class="fa-solid fa-house"></i>首頁</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <i class="fa-solid fa-briefcase"></i>工作經驗</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <i class="fa-solid fa-laptop-code"></i>專長項目</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <div>
+                            <!-- Button trigger modal -->
+                            <!-- data-bs-target="#registerModal" 要和 modal 的 id 一致-->
+                            <button class="btn" style="background-color: var(--primary); color: var(--primary-light);"
+                                data-bs-toggle="modal" data-bs-target="#registerModal">註冊</button>
+                            <button class="btn"
+                                style="background-color: var(--bg-color); color: var(--primary); border-color: var(--primary);"
+                                data-bs-toggle="modal" data-bs-target="#loginModal">登入</button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </section>
+
+    <!-- registerModal 註冊-->
+    <!-- data-bs-backdrop="static": 改為靜態視窗, 點選外面不會關閉視窗 -->
+    <div class="modal fade" id="registerModal" data-bs-backdrop="static" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- modal-dialog-centered: 將視窗置中
+             modal-lg: 將視窗放大, 其他尺寸: sm,lg,xl, 放大後就可多塞其他內容, 例如:註冊畫面多列出會員條款-->
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: var(--primary);">
+                    <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">會員註冊</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <h3 class="text-center">會員條款</h2>
+                                <p>1.同意條款：完成註冊即代表同意本服務條款與隱私權政策，未滿二十歲需經法定代理人同意。</p>
+                                <p>2.帳號安全：請提供正確資料並妥善保管帳號密碼，所有透過該帳號之行為您須負完全責任。</p>
+                                <p>3.隱私保護：蒐集之個資僅用於會員服務、身分驗證與網站分析，絕不違法外洩或提供第三方。</p>
+                                <p>4.服務中斷：本網站保留隨時修改或終止服務之權利，因系統維護或不可抗力暫停恕不負賠償責任。</p>
+                                <p>5.智慧財產：網站所有內容與程式碼均受智慧財產權保護，未經同意不得擅自重製、修改或使用。</p>
+                                <!-- <label for="" class="form-label fw-semibold">課程通知設定</label> -->
+                                <div class="p-2 bg-light">
+                                    <div class="form-check form-switch">
+                                        <input type="checkbox" class="form-check-input" id="switch01">
+                                        <label for="switch01" class="form-check-label">已閱讀完畢，並同意遵守其條款</label>
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="row p-2">
+                                <!-- 基本輸入框：帳號 -->
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="username" class="form-label fw-semibold">帳號</label>
+                                        <input type="text" class="form-control" id="username">
+                                    </div>
+                                </div>
+
+                                <!-- 密碼 -->
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label fw-semibold">密碼</label>
+                                        <input type="password" class="form-control" id="password">
+                                    </div>
+                                </div>
+
+                                <!-- 確認密碼 -->
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="repassword" class="form-label fw-semibold">確認密碼</label>
+                                        <input type="password" class="form-control" id="repassword">
+                                    </div>
+                                </div>
+
+                                <!-- Email -->
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label fw-semibold">Email</label>
+                                        <input type="text" class="form-control" id="email"
+                                            placeholder="name@example.com">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex">
+                    <!-- 將超連結改成modal, 並呼叫登入頁面, 減少使用者要執行的動作 -->
+                    <!-- me-auto: 搭配d-flex使用, 將物件推到最左邊, 其餘都在最右邊 -->
+                    <a href="#" class="me-auto text-decoration-none" data-bs-toggle="modal"
+                        data-bs-target="#loginModal">已有帳號，直接登入</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">確認</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- loginModal 登入-->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: var(--primary);">
+                    <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">會員登入</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row p-2">
+                        <!-- 基本輸入框：帳號 -->
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="username" class="form-label fw-semibold">帳號</label>
+                                <input type="text" class="form-control" id="username">
+                            </div>
+                        </div>
+
+                        <!-- 密碼 -->
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="password" class="form-label fw-semibold">密碼</label>
+                                <input type="password" class="form-control" id="password">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex">
+                    <a href="#" class="me-auto text-decoration-none" data-bs-toggle="modal"
+                        data-bs-target="#registerModal">沒有帳號，去註冊</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">確認</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- section 03 幻燈片效果/輪播圖 carousel -->
+    <!-- carousel with captions 附字幕 -->
+    <!-- <section id="s03">
+        <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="false">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+                    aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+                    aria-label="Slide 3"></button>
+            </div>
+            將圖片都改用背景圖, 避免圖片不同尺寸, 造成跑版
+            字幕都加一個半透明的底色, 避免圖片不同顏色, 造成字幕不清楚
+            <div class="carousel-inner">
+                active: 預設第一張顯示的圖片
+                85vh: 佔瀏覽器的85%
+                <div class="carousel-item active bg-img"
+                    style="background-image: url(images/Film/film03.avif); height: 85vh;">
+                    rounded-3: 導圓角
+                    <div class="carousel-caption d-none d-md-block rounded-3"
+                        style="background-color: rgba(0,0,0,0.3);">
+                        <h5>First slide label</h5>
+                        <p>Some representative placeholder content for the first slide.</p>
+                    </div>
+                </div>
+
+                <div class="carousel-item bg-img" style="background-image: url(images/Film/film02.avif); height: 85vh;">
+                    <div class="carousel-caption d-none d-md-block rounded-3"
+                        style="background-color: rgba(0,0,0,0.3);">
+                        <h5>Second slide label</h5>
+                        <p>Some representative placeholder content for the second slide.</p>
+                    </div>
+                </div>
+
+                <div class="carousel-item bg-img" style="background-image: url(images/Film/film06.avif); height: 85vh;">
+                    <div class="carousel-caption d-none d-md-block rounded-3"
+                        style="background-color: rgba(0,0,0,0.3);">
+                        <h5>Third slide label</h5>
+                        <p>Some representative placeholder content for the third slide.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </section> -->
+
+    <!-- section 03 幻燈片效果/輪播圖 carousel with AI -->
+    <section id="s03">
+        <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+                    aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+                    aria-label="Slide 3"></button>
+            </div>
+
+            <div class="carousel-inner">
+                <!-- 第一張 -->
+                <div class="carousel-item active bg-img"
+                    style="background-image: url(images/Film/film03.avif); height: 85vh;">
+                    <!-- 拿掉 d-none d-md-block，改由 CSS 控制手機與 PC 的顯示與排版 -->
+                    <div class="carousel-caption carousel-caption-left text-start">
+                        <h4 class="fw-bold mb-3 text-white">
+                            <i class="fa-solid fa-laptop-code me-2" style="color: var(--accent);"></i>前端開發與工作經驗
+                        </h4>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>3年+
+                                Web前端工程實務開發經驗</li>
+                            <li class="mb-2"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>精通
+                                HTML5 / CSS3 / JavaScript (ES6+)</li>
+                            <li class="mb-2"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>熟練
+                                Bootstrap 5 響應式網頁切版 (RWD)</li>
+                            <li class="mb-0"><i class="fa-solid fa-check me-2"
+                                    style="color: var(--accent);"></i>跨瀏覽器相容性調校與效能最佳化</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 第二張 -->
+                <div class="carousel-item bg-img" style="background-image: url(images/Film/film02.avif); height: 85vh;">
+                    <div class="carousel-caption carousel-caption-left text-start">
+                        <h4 class="fw-bold mb-3 text-white">
+                            <i class="fa-solid fa-server me-2" style="color: var(--accent);"></i>後端與資料庫技術
+                        </h4>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>RESTful
+                                API 整合與 JSON 資料串接</li>
+                            <li class="mb-2"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>Node.js
+                                / Express 基礎後端服務架構</li>
+                            <li class="mb-2"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>MySQL /
+                                MongoDB 資料庫設計與查詢</li>
+                            <li class="mb-0"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>使用 Git
+                                / GitHub 進行版本控制與團隊協作</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 第三張 -->
+                <div class="carousel-item bg-img" style="background-image: url(images/Film/film06.avif); height: 85vh;">
+                    <div class="carousel-caption carousel-caption-left text-start">
+                        <h4 class="fw-bold mb-3 text-white">
+                            <i class="fa-solid fa-wand-magic-sparkles me-2" style="color: var(--accent);"></i>UI/UX
+                            設計與專案管理
+                        </h4>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>Figma
+                                原型設計與 Wireframe 繪製</li>
+                            <li class="mb-2"><i class="fa-solid fa-check me-2"
+                                    style="color: var(--accent);"></i>使用者體驗優化與 SPA 單頁應用架構</li>
+                            <li class="mb-2"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>主導 5+
+                                個企業級響應式網站開發上線</li>
+                            <li class="mb-0"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>敏捷開發
+                                (Agile) 流程導入與跨部門溝通</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- section 04 counterup 可量化的數據 -->
+    <!-- <section id="04">
+        container-fluid: 將container 延伸到兩側
+        <div class="container-fluid">
             <div class="row">
-                <div class="text-end">
-                    <!-- 引用 Font Awesome 的圖示 -->
-                    <a href="#"><i class="fa-brands fa-instagram fa-2x text-light"></i></a>
-                    <a href="#"><i class="fa-brands fa-facebook-square fa-2x text-primary"></i></a>
-                    <a href="#"><i class="fa-brands fa-line fa-2x text-success"></i></a>
+                <div class="col-md-5 bg-img" style="background-image: url(images/Film/film07.avif);"></div>
+                <div class="col-md-7 py-5 text-center">
+                    <h2>不詳頭銜一個月，競。</h2>
+                    <p>新手群發得到道理首次很久一系列，令人解。</p>
+                    <p>新手群發得到道理首次很久一系列，令人解。</p>
+                    <div class="row">
+                        <div class="col-md-3 text-center">
+                            <h4>工作年資</h4>
+                            <div class="h4"><span class="h2 text-primary">8 </span>年</div>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <h4>累計作品</h4>
+                            <div class="h4"><span class="h2 text-primary">20 </span>件</div>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <h4>工作年資</h4>
+                            <div class="h4"><span class="h2 text-primary">8 </span>年</div>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <h4>工作年資</h4>
+                            <div class="h4"><span class="h2 text-primary">8 </span>年</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- section 04 counterup 可量化的數據 with AI -->
+    <section id="s04" class="py-5" style="background-color: var(--surface-color);">
+        <!-- container-fluid: 將 container 延伸到兩側 -->
+        <div class="container-fluid px-0">
+            <div class="row g-0 align-items-center">
+                <!-- 左側：標題、介紹與數據內容 -->
+                <div class="col-md-7 py-5 px-4 px-lg-5">
+                    <div class="max-w-content mx-auto" style="max-width: 650px;">
+                        <!-- 大標題與副標題 -->
+                        <h2 class="fw-bold mb-3" style="color: var(--text-main);">
+                            以技術與美感，打造兼具效能與溫度的網頁體驗
+                        </h2>
+                        <p class="text-muted mb-2">
+                            具備紮實的前端全端開發訓練背景，擅長運用 HTML5、CSS3、JavaScript 與響應式框架（Bootstrap 5），致力於將複雜需求轉化為直覺流暢的數位介面。
+                        </p>
+                        <p class="text-muted mb-4">
+                            重視團隊協作與程式碼規範，持續探索現代網頁技術與 UI/UX 設計的最佳實踐。
+                        </p>
+
+                        <!-- 四項可量化數據 -->
+                        <div class="row g-4 mt-4 pt-3 border-top" style="border-color: var(--border-color);">
+                            <!-- 數據 1：工作年資 -->
+                            <div class="col-6 col-md-3 text-center">
+                                <h5 class="text-muted fs-6 mb-2">工作年資</h5>
+                                <div><span class="display-6 fw-bold counter01"
+                                        style="color: var(--accent);">6</span><span class="fs-5 text-muted">+ 年</span>
+                                </div>
+                            </div>
+                            <!-- 數據 2：全端培訓時數 -->
+                            <div class="col-6 col-md-3 text-center">
+                                <h5 class="text-muted fs-6 mb-2">全端培訓時數</h5>
+                                <div><span class="display-6 fw-bold counter02"
+                                        style="color: var(--accent);">400</span><span class="fs-5 text-muted">+
+                                        小時</span></div>
+                            </div>
+                            <!-- 數據 3：獨立專案作品 -->
+                            <div class="col-6 col-md-3 text-center">
+                                <h5 class="text-muted fs-6 mb-2">獨立專案作品</h5>
+                                <div><span class="display-6 fw-bold counter03"
+                                        style="color: var(--accent);">10</span><span class="fs-5 text-muted">+ 件</span>
+                                </div>
+                            </div>
+                            <!-- 數據 4：掌握技術工具 -->
+                            <div class="col-6 col-md-3 text-center">
+                                <h5 class="text-muted fs-6 mb-2">掌握技術工具</h5>
+                                <div><span class="display-6 fw-bold counter04"
+                                        style="color: var(--accent);">8</span><span class="fs-5 text-muted">+ 項</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右側：情境形象圖 -->
+                <div class="col-md-5"
+                    style="background-image: url(images/Film/film07.avif); min-height: 400px; background-size: cover; background-position: center;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- section 05 工作信念 切版 -->
+    <!-- <section id="05">
+        <div class="container">
+            <h2 class="text-center my-3">工作信念</h2>
+            <div class="row g-5">
+                <div class="col-md-4 text-center">
+                    <i class="fa-solid fa-bullseye fa-canvas-roomy fa-4x"></i>
+                    <h3 class="my-3">解決問題</h3>
+                    <p>屬於英語連載拍攝時間成績兒子說出特性可。</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="fa-solid fa-bullseye fa-canvas-roomy fa-4x"></i>
+                    <h3 class="my-3">解決問題</h3>
+                    <p>屬於英語連載拍攝時間成績兒子說出特性可。</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="fa-solid fa-bullseye fa-canvas-roomy fa-4x"></i>
+                    <h3 class="my-3">解決問題</h3>
+                    <p>屬於英語連載拍攝時間成績兒子說出特性可。</p>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- section 05 工作信念 (4欄式排版) -->
+    <section id="s05" class="py-5" style="background-color: var(--surface-alt);">
+        <div class="container py-4">
+            <!-- 區塊標題 -->
+            <div class="text-center mb-5">
+                <h2 class="fw-bold mb-2" style="color: var(--text-main);">工作信念</h2>
+                <p class="text-muted">堅持專業與熱忱，在每一次的專案中追求卓越</p>
+            </div>
+
+            <!-- 四欄卡片網格 (col-md-3 適合 4 個項目) -->
+            <div class="row g-4">
+                <!-- 信念 1：邏輯解構 -->
+                <div class="col-sm-6 col-md-3">
+                    <div class="belief-card text-center p-4 h-100">
+                        <div class="icon-box mx-auto mb-3">
+                            <i class="fa-solid fa-puzzle-piece fa-xl"></i>
+                        </div>
+                        <h3 class="h6 fw-bold mb-2" style="color: var(--text-main);">邏輯解構</h3>
+                        <p class="text-muted small mb-0">
+                            結合過往系統實務經驗，擅長將繁雜需求與 Bug 拆解，精準落實高效解法。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 信念 2：視覺美感 -->
+                <div class="col-sm-6 col-md-3">
+                    <div class="belief-card text-center p-4 h-100">
+                        <div class="icon-box mx-auto mb-3">
+                            <i class="fa-solid fa-wand-magic-sparkles fa-xl"></i>
+                        </div>
+                        <h3 class="h6 fw-bold mb-2" style="color: var(--text-main);">體驗至上</h3>
+                        <p class="text-muted small mb-0">
+                            重視 UI/UX 細節與 RWD 響應式排版，打造介面直覺且流暢的數位介面。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 信念 3：敏捷學習 -->
+                <div class="col-sm-6 col-md-3">
+                    <div class="belief-card text-center p-4 h-100">
+                        <div class="icon-box mx-auto mb-3">
+                            <i class="fa-solid fa-rocket fa-xl"></i>
+                        </div>
+                        <h3 class="h6 fw-bold mb-2" style="color: var(--text-main);">持續迭代</h3>
+                        <p class="text-muted small mb-0">
+                            保持對新技術的好奇與動能，透過高強度全端訓練不斷自我突破與成長。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 信念 4：協作共好 -->
+                <div class="col-sm-6 col-md-3">
+                    <div class="belief-card text-center p-4 h-100">
+                        <div class="icon-box mx-auto mb-3">
+                            <i class="fa-solid fa-users-gear fa-xl"></i>
+                        </div>
+                        <h3 class="h6 fw-bold mb-2" style="color: var(--text-main);">協作共好</h3>
+                        <p class="text-muted small mb-0">
+                            重視程式碼規範、版本控制與團隊溝通，打造好維護且具延展性的專案。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- section 06 關於我 切版 -->
+    <!-- position & justifty -->
+    <!-- 1. 父層 (#s06) 設定 position: relative 成為定位參考基準。
+         2. 左側 (col-md-5) 設定 position: absolute; top: 0; bottom: 0;，
+            讓它像貼壁紙一樣，緊緊貼住左側並上下拉滿高度，專門用來放滿版圖片。
+         3. 右側文字 則利用 Bootstrap 正常的格線系統（container + justify-content-end）往右靠，
+            與左側圖片形成漂亮的左右對比版型！ -->
+    <!-- <section id="s06" style="position: relative;">
+        <div class="row">
+            <div class="col-md-5 bg-img"
+                style="background-image: url(images/Film/film08.avif); height: 300px; position: absolute; top: 0; bottom: 0;">
+            </div>
+            <div class="container">
+                <div class="row justify-content-end">
+                    <div class="col-md-7">
+                        <div class="h2 text-center">關於我 <span>ABOUT ME</span></div>
+                        <p>我是一個...</p>
+                        <p>相信...</p>
+                        <p>目前正在...作品,專案</p>
+                        <a href="#" class="btn btn-success">了解更多</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- section 06 關於我 (手機自動上下堆疊、電腦左右並排) -->
+    <section id="s06" class="py-5" style="position: relative; background-color: var(--surface-color);">
+        <div class="row g-0 align-items-center">
+
+            <!-- 圖片區塊 (加上自訂 class "about-img" 方便在 CSS 控制 RWD) -->
+            <div class="col-md-5 bg-img about-img"
+                style="background-image: url(images/Film/film08.avif); background-size: cover; background-position: center;">
+            </div>
+
+            <!-- 文字內容容器 -->
+            <div class="container">
+                <div class="row justify-content-end">
+                    <div class="col-md-7 py-5 px-4 px-lg-5">
+                        <!-- 標題與英文裝飾 -->
+                        <div class="mb-4">
+                            <h2 class="fw-bold mb-1" style="color: var(--text-main);">關於我 <span
+                                    class="text-uppercase fw-semibold"
+                                    style="color: var(--accent); letter-spacing: 2px; font-size: 0.85rem;">About
+                                    Me</span></h2>
+                        </div>
+
+                        <!-- 履歷內文 -->
+                        <p class="text-muted mb-3" style="line-height: 1.7;">
+                            我是一個具備多年 <strong class="text-dark">ERP
+                                系統實務經驗</strong>、正積極轉職的前端/全端網頁開發者。過去在企業系統的歷練，培養了我嚴謹的邏輯思維與快速釐清複雜需求的能力。
+                        </p>
+                        <p class="text-muted mb-3" style="line-height: 1.7;">
+                            深信優秀的網頁不僅要有流暢的效能，更需要兼具直覺的 <strong class="text-dark">UI/UX 設計與 RWD
+                                響應式體驗</strong>。因此我對每一行程式碼與視覺細節都抱持著高度的堅持。
+                        </p>
+                        <p class="text-muted mb-4" style="line-height: 1.7;">
+                            目前正在職訓局接受高強度的全端開發訓練，專注於 <strong class="text-dark">HTML5、CSS3、JavaScript、Bootstrap 與 Git
+                                版控</strong>，並已累積多件獨立專案作品。期待能將跨領域的經驗結合現代前端技術，為團隊創造實質價值。
+                        </p>
+
+                        <!-- 行動呼籲按鈕 -->
+                        <div class="d-flex gap-3">
+                            <a href="#s04" class="btn text-white px-4 py-2"
+                                style="background-color: var(--primary); border-radius: var(--radius-sm); transition: var(--transition);">查看數據亮點</a>
+                            <a href="#contact" class="btn px-4 py-2"
+                                style="border: 1px solid var(--border-color); color: var(--text-main); border-radius: var(--radius-sm);">聯絡我</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/counterup2@2.0.2/dist/index.js"></script>
+    <script>
+        const counterUp = window.counterUp.default
 
+        const callback = entries => {
+            entries.forEach(entry => {
+                const el = entry.target
+                if (entry.isIntersecting && !el.classList.contains('is-visible')) {
+                    counterUp(el, {
+                        duration: 2000,
+                        delay: 16,
+                    })
+                    el.classList.add('is-visible')
+                }
+            })
+        }
+
+        const IO = new IntersectionObserver(callback, { threshold: 1 })
+
+        const el01 = document.querySelector('.counter01')
+        IO.observe(el01)
+
+        const el02 = document.querySelector('.counter02')
+        IO.observe(el02)
+
+        const el03 = document.querySelector('.counter03')
+        IO.observe(el03)
+
+        const el04 = document.querySelector('.counter04')
+        IO.observe(el04)        
+    </script>
 </body>
 
 </html>
