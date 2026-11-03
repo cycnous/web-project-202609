@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPA - 個人履歷排版練習</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="css/myall.css">
+    <style>
+        :root {
+            /* 1. 主色系：療癒森系綠 */
+            --primary: #5C7665;
+            --primary-hover: #4A5F52;
+            --primary-light: #EBF0EC;
+
+            /* 2. 強調色：溫暖珊瑚橘 */
+            --accent: #E07A5F;
+            --accent-hover: #CC694E;
+            --accent-light: #FDF1ED;
+            --accent-dark: #B85B40;
+
+            /* 3. 背景與表面色：溫潤米白與灰綠底色 */
+            --bg-color: #F9F8F6;
+            --surface-color: #FFFFFF;
+            --surface-alt: #F2F5F3;
+
+            /* 4. 文字色：深灰褐與柔和灰 */
+            --text-main: #2C3531;
+            --text-muted: #737A76;
+
+            /* 5. Section 03 輪播圖專屬顏色參數 */
+            --carousel-card-bg: rgba(44, 53, 49, 0.88);
+            --carousel-card-bg-mobile: rgba(44, 53, 49, 0.94);
+
+            /* 6. 邊框、陰影與共用屬性 */
+            --border-color: #E2E8F0;
+            --shadow-sm: 0 4px 6px -1px rgba(92, 118, 101, 0.06);
+            --shadow-md: 0 10px 20px -3px rgba(92, 118, 101, 0.1);
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-full: 50px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+            /* Section 10 專用顏色變數 */
+            --s10-card-bg: rgba(0, 0, 0, 0.5);
+            --s10-text-title: #ffffff;
+            --s10-text-sub: rgba(255, 255, 255, 0.9);
+            --s10-text-body: rgba(255, 255, 255, 0.85);
+            --s10-btn-bg: var(--primary);
+            --s10-btn-text: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+        }
+
+        /* Section 01 社群連結 */
+        #s01 {
+            background-color: var(--primary);
+        }
+        #s01 a i {
+            transition: var(--transition);
+        }
+        #s01 a:hover i {
+            color: var(--accent) !important;
+            transform: scale(1.1);
+        }
+
+        /* Section 02 導覽列與 Modal */
+        #s02 .navbar {
+            background-color: var(--surface-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+        #s02 .btn-register {
+            background-color: var(--primary);
+            color: var(--primary-light);
+            border: 1px solid var(--primary);
+            transition: var(--transition);
+        }
+        #s02 .btn-register:hover {
+            background-color: var(--primary-hover);
+            color: #ffffff;
+        }
+        #s02 .btn-login {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            transition: var(--transition);
+        }
+        #s02 .btn-login:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-hover);
+        }
+        #s02 .modal-header {
+            background-color: var(--primary);
+        }
+        #s02 .btn-modal-confirm {
+            background-color: var(--primary);
+            color: #ffffff;
+            border: none;
+            transition: var(--transition);
+        }
+        #s02 .btn-modal-confirm:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Section 03 輪播圖 */
+        #s03 .carousel-caption-left {
+            position: absolute;
+            left: 8%;
+            right: auto;
+            bottom: 15%;
+            top: auto;
+            transform: none;
+            max-width: 580px;
+            background-color: var(--carousel-card-bg);
+            border-left: 6px solid var(--accent);
+            border-top: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-sm);
+            padding: 2.5rem;
+            margin: 0;
+        }
+        #s03 .carousel-caption-left h4 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+        }
+        #s03 .carousel-caption-left li {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Section 04 數據亮點 */
+        #s04 {
+            background-color: var(--surface-color);
+        }
+        #s04 .counter-num {
+            color: var(--accent);
+        }
+
+        /* Section 05 工作信念 */
+        #s05 {
+            background-color: var(--surface-alt);
+        }
+        #s05 .belief-card {
+            background-color: var(--surface-color);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+        #s05 .belief-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-light);
+        }
+        #s05 .belief-card .icon-box {
+            width: 65px;
+            height: 65px;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        #s05 .belief-card:hover .icon-box {
+            background-color: var(--accent-light);
+            color: var(--accent);
+        }
+        #s05 .belief-card p {
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        /* Section 06 關於我 */
+        #s06 {
+            position: relative;
+            background-color: var(--surface-color);
+        }
+        #s06 .btn-about-primary {
+            background-color: var(--primary);
+            color: #ffffff;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+        #s06 .btn-about-primary:hover {
+            background-color: var(--primary-hover);
+            color: #ffffff;
+        }
+        #s06 .btn-about-outline {
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+        #s06 .btn-about-outline:hover {
+            background-color: var(--surface-alt);
+            border-color: var(--text-muted);
+        }
+
+        /* Section 07 作品集 */
+        #s07 {
+            background-color: var(--surface-color);
+        }
+        #s07 .portfolio-card {
+            background-color: transparent;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+        #s07 .portfolio-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
+            background-color: transparent;
+        }
+        #s07 .portfolio-card .portfolio-icon {
+            width: 65px;
+            height: 65px;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        #s07 .portfolio-card:hover .portfolio-icon {
+            background-color: var(--accent-light);
+            color: var(--accent);
+        }
+        #s07 .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        #s07 .tech-badge {
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 2px 8px;
+            background-color: var(--surface-color);
+            color: var(--accent);
+            border: 1px solid var(--border-color);
+            border-radius: 50rem;
+        }
+        #s07 .portfolio-btn-custom {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        #s07 .portfolio-btn-custom:hover {
+            background-color: var(--primary);
+            color: #FFFFFF;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Section 08 學經歷介紹 */
+        #s08 {
+            position: relative;
+            background-color: var(--surface-color);
+        }
+        #s08 .experience-list dt {
+            font-size: 0.95rem;
+            padding-top: 2px;
+            color: var(--primary);
+        }
+        #s08 .experience-list dd {
+            border-left: 2px solid var(--border-color);
+            padding-left: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+        #s08 .experience-list dd:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Section 09 聯絡我 */
+        #s09 {
+            background-color: var(--surface-color);
+        }
+        #s09 .custom-input {
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+        #s09 .custom-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(40, 70, 56, 0.15);
+        }
+        #s09 .contact-btn-cancel {
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+        #s09 .contact-btn-cancel:hover {
+            background-color: var(--surface-color);
+            color: var(--text-main);
+            border-color: var(--text-muted);
+        }
+        #s09 .contact-btn-submit {
+            background-color: var(--primary);
+            color: #ffffff;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+        #s09 .contact-btn-submit:hover {
+            background-color: var(--primary-hover);
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
+
+        /* Section 10 未來展望 & 職涯發展 */
+        #s10 .vision-col,
+        #s10 .career-col {
+            background-size: cover;
+            background-position: center;
+            justify-content: flex-start !important;
+        }
+        #s10 .tech-tag {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: var(--s10-text-title);
+            font-weight: 500;
+            font-size: 0.75rem;
+            padding: 0.35em 0.65em;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        #s10 .vision-btn,
+        #s10 .career-btn {
+            border: none;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+        #s10 .vision-btn:hover,
+        #s10 .career-btn:hover {
+            background-color: var(--accent) !important;
+            color: #ffffff !important;
+            transform: translateY(-2px);
+        }
+
+        /* Section 11 頁尾 Footer */
+        #s11 {
+            background-color: var(--surface-alt);
+            border-top: 1px solid var(--border-color);
+        }
+        #s11 .footer-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        #s11 .footer-link:hover {
+            color: var(--accent);
+        }
+
+        /* 媒體查詢 (RWD 斷點設定) */
+        @media (min-width: 768px) {
+            #s06 .about-img {
+                position: absolute !important;
+                top: 0;
+                bottom: 0;
+                width: 41.666667%;
+                min-height: 100%;
+            }
+            #s08 {
+                overflow: hidden;
+            }
+            #s08 .experience-img {
+                position: absolute !important;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                width: 41.666667%;
+                min-height: 100%;
+            }
+            #s09 .map-container iframe {
+                height: 100%;
+            }
+            #s10 .vision-card,
+            #s10 .career-card {
+                min-height: 480px !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #s03 .carousel-item {
+                height: 55vh !important;
+            }
+            #s03 .carousel-caption-left {
+                left: 5%;
+                right: 5%;
+                max-width: 90%;
+                margin: 0 auto;
+                background-color: var(--carousel-card-bg-mobile);
+                border-left: 5px solid var(--accent);
+                padding: 1.2rem;
+            }
+            #s03 .carousel-caption-left h4 {
+                font-size: 1.1rem;
+                margin-bottom: 0.5rem;
+            }
+            #s03 .carousel-caption-left li {
+                font-size: 0.85rem;
+                margin-bottom: 0.4rem;
+            }
+            #s06 .about-img {
+                position: relative !important;
+                width: 100%;
+                height: 280px;
+            }
+            #s07 .portfolio-card {
+                padding: 1.2rem !important;
+            }
+            #s07 .portfolio-card .portfolio-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 0.8rem;
+            }
+            #s08 .experience-img {
+                position: relative !important;
+                width: 100%;
+                height: 260px;
+                margin-bottom: 1rem;
+            }
+            #s08 .experience-list dt {
+                text-align: left !important;
+                margin-bottom: 0.2rem;
+            }
+            #s08 .experience-list dd {
+                border-left: none;
+                padding-left: 0;
+            }
+            #s09 .map-container {
+                min-height: 320px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- section 01 社群連結 -->
+    <section id="s01">
+        <div class="container py-2">
+            <div class="row">
+                <div class="text-end">
+                    <a href="#" class="me-2"><i class="fa-brands fa-instagram fa-2x text-light"></i></a>
+                    <a href="#" class="me-2"><i class="fa-brands fa-facebook-square fa-2x text-light"></i></a>
+                    <a href="#"><i class="fa-brands fa-line fa-2x text-light"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- section 02 選單 navbar + modal -->
+    <section id="s02">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#s03"><i class="fa-regular fa-face-smile fa-2x" style="color: var(--primary);"></i></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#s03">
+                                    <i class="fa-solid fa-house me-1"></i>首頁</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#s06">
+                                    <i class="fa-solid fa-user me-1"></i>關於我</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#s08">
+                                    <i class="fa-solid fa-briefcase me-1"></i>工作經驗</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <i class="fa-solid fa-laptop-code me-1"></i>專長項目</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#s04">數據亮點</a></li>
+                                    <li><a class="dropdown-item" href="#s05">工作信念</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="#s07">精選作品集</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#s09">
+                                    <i class="fa-solid fa-envelope me-1"></i>聯絡我</a>
+                            </li>
+                        </ul>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-register px-3" data-bs-toggle="modal" data-bs-target="#registerModal">註冊</button>
+                            <button class="btn btn-login px-3" data-bs-toggle="modal" data-bs-target="#loginModal">登入</button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </section>
+
+    <!-- registerModal 註冊-->
+    <div class="modal fade" id="registerModal" data-bs-backdrop="static" tabindex="-1"
+        aria-labelledby="registerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 text-light" id="registerModalLabel">會員註冊</h1>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 border-end">
+                            <h5 class="text-center fw-bold mb-3">會員條款</h5>
+                            <p class="small text-muted">1. 同意條款：完成註冊即代表同意本服務條款與隱私權政策。</p>
+                            <p class="small text-muted">2. 帳號安全：請提供正確資料並妥善保管帳號密碼。</p>
+                            <p class="small text-muted">3. 隱私保護：蒐集之個資僅用於會員服務，絕不違法外洩。</p>
+                            <p class="small text-muted">4. 服務中斷：本網站保留隨時修改或終止服務之權利。</p>
+                            <p class="small text-muted">5. 智慧財產：網站內容與程式碼均受智慧財產權保護。</p>
+                            <div class="p-2 bg-light rounded mt-3">
+                                <div class="form-check form-switch">
+                                    <input type="checkbox" class="form-check-input" id="switch01">
+                                    <label for="switch01" class="form-check-label small">已閱讀完畢，並同意遵守其條款</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row p-2">
+                                <div class="col-12 mb-3">
+                                    <label for="reg-username" class="form-label fw-semibold">帳號</label>
+                                    <input type="text" class="form-control" id="reg-username">
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="reg-password" class="form-label fw-semibold">密碼</label>
+                                    <input type="password" class="form-control" id="reg-password">
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="repassword" class="form-label fw-semibold">確認密碼</label>
+                                    <input type="password" class="form-control" id="repassword">
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="email" class="form-label fw-semibold">Email</label>
+                                    <input type="email" class="form-control" id="email" placeholder="name@example.com">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex">
+                    <a href="#" class="me-auto text-decoration-none small" data-bs-toggle="modal" data-bs-target="#loginModal">已有帳號，直接登入</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-modal-confirm">確認註冊</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- loginModal 登入-->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 text-light" id="loginModalLabel">會員登入</h1>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row p-2">
+                        <div class="col-12 mb-3">
+                            <label for="login-username" class="form-label fw-semibold">帳號</label>
+                            <input type="text" class="form-control" id="login-username">
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="login-password" class="form-label fw-semibold">密碼</label>
+                            <input type="password" class="form-control" id="login-password">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex">
+                    <a href="#" class="me-auto text-decoration-none small" data-bs-toggle="modal" data-bs-target="#registerModal">沒有帳號，去註冊</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-modal-confirm">確認登入</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- section 03 幻燈片效果/輪播圖 -->
+    <section id="s03">
+        <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+
+            <div class="carousel-inner">
+                <div class="carousel-item active bg-img" style="background-image: url(images/Film/film03.avif); height: 85vh;">
+                    <div class="carousel-caption carousel-caption-left text-start">
+                        <h4 class="fw-bold mb-3 text-white">
+                            <i class="fa-solid fa-laptop-code me-2" style="color: var(--accent);"></i>前端開發與工作經驗
+                        </h4>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>3年+ Web前端工程實務開發經驗</li>
+                            <li class="mb-2"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>精通 HTML5 / CSS3 / JavaScript (ES6+)</li>
+                            <li class="mb-2"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>熟練 Bootstrap 5 響應式網頁切版 (RWD)</li>
+                            <li class="mb-0"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>跨瀏覽器相容性調校與效能最佳化</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="carousel-item bg-img" style="background-image: url(images/Film/film02.avif); height: 85vh;">
+                    <div class="carousel-caption carousel-caption-left text-start">
+                        <h4 class="fw-bold mb-3 text-white">
+                            <i class="fa-solid fa-server me-2" style="color: var(--accent);"></i>後端與資料庫技術
+                        </h4>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>RESTful API 整合與 JSON 資料串接</li>
+                            <li class="mb-2"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>Node.js / Express 基礎後端服務架構</li>
+                            <li class="mb-2"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>MySQL / MongoDB 資料庫設計與查詢</li>
+                            <li class="mb-0"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>使用 Git / GitHub 進行版本控制與團隊協作</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="carousel-item bg-img" style="background-image: url(images/Film/film06.avif); height: 85vh;">
+                    <div class="carousel-caption carousel-caption-left text-start">
+                        <h4 class="fw-bold mb-3 text-white">
+                            <i class="fa-solid fa-wand-magic-sparkles me-2" style="color: var(--accent);"></i>UI/UX 設計與專案管理
+                        </h4>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>Figma 原型設計與 Wireframe 繪製</li>
+                            <li class="mb-2"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>使用者體驗優化與 SPA 單頁應用架構</li>
+                            <li class="mb-2"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>主導 5+ 個企業級響應式網站開發上線</li>
+                            <li class="mb-0"><i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>敏捷開發 (Agile) 流程導入與跨部門溝通</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- section 04 可量化的數據 -->
+    <section id="s04" class="py-5">
+        <div class="container-fluid px-0">
+            <div class="row g-0 align-items-center">
+                <div class="col-md-7 py-5 px-4 px-lg-5">
+                    <div class="mx-auto" style="max-width: 650px;">
+                        <h2 class="fw-bold mb-3">以技術與美感，打造兼具效能與溫度的網頁體驗</h2>
+                        <p class="text-muted mb-2">具備紮實的前端全端開發訓練背景，擅長運用 HTML5、CSS3、JavaScript 與響應式框架（Bootstrap 5），致力於將複雜需求轉化為直覺流暢的數位介面。</p>
+                        <p class="text-muted mb-4">重視團隊協作與程式碼規範，持續探索現代網頁技術與 UI/UX 設計的最佳實踐。</p>
+
+                        <div class="row g-4 mt-4 pt-3 border-top" style="border-color: var(--border-color);">
+                            <div class="col-6 col-md-3 text-center">
+                                <h5 class="text-muted fs-6 mb-2">工作年資</h5>
+                                <div><span class="display-6 fw-bold counter01 counter-num">6</span><span class="fs-5 text-muted">+ 年</span></div>
+                            </div>
+                            <div class="col-6 col-md-3 text-center">
+                                <h5 class="text-muted fs-6 mb-2">全端培訓時數</h5>
+                                <div><span class="display-6 fw-bold counter02 counter-num">400</span><span class="fs-5 text-muted">+ 小時</span></div>
+                            </div>
+                            <div class="col-6 col-md-3 text-center">
+                                <h5 class="text-muted fs-6 mb-2">獨立專案作品</h5>
+                                <div><span class="display-6 fw-bold counter03 counter-num">10</span><span class="fs-5 text-muted">+ 件</span></div>
+                            </div>
+                            <div class="col-6 col-md-3 text-center">
+                                <h5 class="text-muted fs-6 mb-2">掌握技術工具</h5>
+                                <div><span class="display-6 fw-bold counter04 counter-num">8</span><span class="fs-5 text-muted">+ 項</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5" style="background-image: url(images/Film/film07.avif); min-height: 400px; background-size: cover; background-position: center;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- section 05 工作信念 -->
+    <section id="s05" class="py-5">
+        <div class="container py-4">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold mb-2">工作信念</h2>
+                <p class="text-muted">堅持專業與熱忱，在每一次的專案中追求卓越</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-sm-6 col-md-3">
+                    <div class="belief-card text-center p-4 h-100">
+                        <div class="icon-box mx-auto mb-3">
+                            <i class="fa-solid fa-puzzle-piece fa-xl"></i>
+                        </div>
+                        <h3 class="h6 fw-bold mb-2">邏輯解構</h3>
+                        <p class="text-muted small mb-0">結合過往系統實務經驗，擅長將繁雜需求與 Bug 拆解，精準落實高效解法。</p>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="belief-card text-center p-4 h-100">
+                        <div class="icon-box mx-auto mb-3">
+                            <i class="fa-solid fa-wand-magic-sparkles fa-xl"></i>
+                        </div>
+                        <h3 class="h6 fw-bold mb-2">體驗至上</h3>
+                        <p class="text-muted small mb-0">重視 UI/UX 細節與 RWD 響應式排版，打造介面直覺且流暢的數位介面。</p>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="belief-card text-center p-4 h-100">
+                        <div class="icon-box mx-auto mb-3">
+                            <i class="fa-solid fa-rocket fa-xl"></i>
+                        </div>
+                        <h3 class="h6 fw-bold mb-2">持續迭代</h3>
+                        <p class="text-muted small mb-0">保持對新技術的好奇與動能，透過高強度全端訓練不斷自我突破與成長。</p>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="belief-card text-center p-4 h-100">
+                        <div class="icon-box mx-auto mb-3">
+                            <i class="fa-solid fa-users-gear fa-xl"></i>
+                        </div>
+                        <h3 class="h6 fw-bold mb-2">協作共好</h3>
+                        <p class="text-muted small mb-0">重視程式碼規範、版本控制與團隊溝通，打造好維護且具延展性的專案。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- section 06 關於我 -->
+    <section id="s06" class="py-5">
+        <div class="row g-0 align-items-center">
+            <div class="col-md-5 bg-img about-img" style="background-image: url(images/Film/film08.avif); background-size: cover; background-position: center;"></div>
+            <div class="container">
+                <div class="row justify-content-end">
+                    <div class="col-md-7 py-5 px-4 px-lg-5">
+                        <div class="mb-4">
+                            <h2 class="fw-bold mb-1">關於我 <span class="text-uppercase fw-semibold ms-1" style="color: var(--accent); letter-spacing: 2px; font-size: 0.85rem;">About Me</span></h2>
+                        </div>
+                        <p class="text-muted mb-3" style="line-height: 1.7;">
+                            我是一個具備多年 <strong class="text-dark">ERP 系統實務經驗</strong>、正積極轉職的前端/全端網頁開發者。過去在企業系統的歷練，培養了我嚴謹的邏輯思維與快速釐清複雜需求的能力。
+                        </p>
+                        <p class="text-muted mb-3" style="line-height: 1.7;">
+                            深信優秀的網頁不僅要有流暢的效能，更需要兼具直覺的 <strong class="text-dark">UI/UX 設計與 RWD 響應式體驗</strong>。因此我對每一行程式碼與視覺細節都抱持著高度的堅持。
+                        </p>
+                        <p class="text-muted mb-4" style="line-height: 1.7;">
+                            目前正在職訓局接受高強度的全端開發訓練，專注於 <strong class="text-dark">HTML5、CSS3、JavaScript、Bootstrap 與 Git 版控</strong>，並已累積多件獨立專案作品。期待能將跨領域的經驗結合現代前端技術，為團隊創造實質價值。
+                        </p>
+                        <div class="d-flex gap-3">
+                            <a href="#s04" class="btn btn-about-primary px-4 py-2">查看數據亮點</a>
+                            <a href="#s09" class="btn btn-about-outline px-4 py-2">聯絡我</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- section 07 精選作品集 -->
+    <section id="s07" class="py-5">
+        <div class="container py-4">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold mb-2">精選作品集</h2>
+                <p class="text-muted">以下是我在學習歷程中累積的練習作品，從前端介面到互動邏輯，逐步建構完整的開發能力。</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-12 col-md-6">
+                    <div class="portfolio-card p-4 h-100 d-flex flex-column justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="portfolio-icon me-4 flex-shrink-0">
+                                <i class="fa-solid fa-laptop-code fa-2x"></i>
+                            </div>
+                            <div>
+                                <div class="h5 fw-bold mb-2">個人履歷網頁</div>
+                                <div class="tech-tags mb-2">
+                                    <span class="tech-badge">HTML5</span>
+                                    <span class="tech-badge">CSS3</span>
+                                    <span class="tech-badge">Bootstrap 5</span>
+                                    <span class="tech-badge">RWD</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="my-3">
+                            <p class="text-muted small mb-2">運用 Bootstrap 5 框架與自定義 CSS 變數實作響應式單頁應用（SPA）。從配色系統到毛玻璃特效與動態排版，打造兼具視覺美感與跨裝置適應力的專業履歷。</p>
+                            <p class="text-muted small mb-0">深刻體會到統一設計系統（CSS Variables）對專案維護的重要性，學會如何在視覺美感與 RWD 響應式排版之間取得絕佳平衡。</p>
+                        </div>
+                        <div class="text-center mt-2">
+                            <a href="#" class="btn px-4 py-2 portfolio-btn-custom"><i class="fa-solid fa-code me-1"></i> 作品連結</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="portfolio-card p-4 h-100 d-flex flex-column justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="portfolio-icon me-4 flex-shrink-0">
+                                <i class="fa-solid fa-clipboard-list fa-2x"></i>
+                            </div>
+                            <div>
+                                <div class="h5 fw-bold mb-2">AI報名系統</div>
+                                <div class="tech-tags mb-2">
+                                    <span class="tech-badge">Bootstrap 5</span>
+                                    <span class="tech-badge">jQuery</span>
+                                    <span class="tech-badge">JavaScript</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="my-3">
+                            <p class="text-muted small mb-2">模擬企業級線上報名表單，具備即時欄位格式驗證（Regex）、LocalStorage 草稿還原與 SweetAlert2 互動彈窗，展現精準的前端邏輯與使用者體驗設計。</p>
+                            <p class="text-muted small mb-0">透過 Regex 驗證與 LocalStorage 的整合，大幅提升了處理使用者非同步互動與資料暫存的實戰能力。</p>
+                        </div>
+                        <div class="text-center mt-2">
+                            <a href="#" class="btn px-4 py-2 portfolio-btn-custom"><i class="fa-solid fa-code me-1"></i> 作品連結</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="portfolio-card p-4 h-100 d-flex flex-column justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="portfolio-icon me-4 flex-shrink-0">
+                                <i class="fa-solid fa-database fa-2x"></i>
+                            </div>
+                            <div>
+                                <div class="h5 fw-bold mb-2">後端管理系統</div>
+                                <div class="tech-tags mb-2">
+                                    <span class="tech-badge">PHP</span>
+                                    <span class="tech-badge">Laravel</span>
+                                    <span class="tech-badge">MySQL</span>
+                                    <span class="tech-badge">Git</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="my-3">
+                            <p class="text-muted small mb-2">運用 Laravel 框架與 MVC 架構建立資料庫驅動的後端系統。實現使用者權限驗證與完整 CRUD 資料處理，結合 Git 進行版本控制與模組化開發。</p>
+                            <p class="text-muted small mb-0">將過去 ERP 的業務邏輯對應到 MVC 架構中，讓我更透徹理解伺服器端資料流向與模組化管理的精髓。</p>
+                        </div>
+                        <div class="text-center mt-2">
+                            <a href="#" class="btn px-4 py-2 portfolio-btn-custom"><i class="fa-solid fa-code me-1"></i> 作品連結</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="portfolio-card p-4 h-100 d-flex flex-column justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="portfolio-icon me-4 flex-shrink-0">
+                                <i class="fa-solid fa-layer-group fa-2x"></i>
+                            </div>
+                            <div>
+                                <div class="h5 fw-bold mb-2">全端整合專案</div>
+                                <div class="tech-tags mb-2">
+                                    <span class="tech-badge">Python</span>
+                                    <span class="tech-badge">PHP</span>
+                                    <span class="tech-badge">API</span>
+                                    <span class="tech-badge">Integration</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="my-3">
+                            <p class="text-muted small mb-2">結合前端介面與後端資料庫的綜合實作。從資料流規劃、演算法優化到前後端串接，全面驗證這段期間所累積的系統實務與開發實力。</p>
+                            <p class="text-muted small mb-0">打通前後端協作的任督二脈，學會從全貌出發去規劃系統架構，對解決複雜 Bug 的邏輯有極大幫助。</p>
+                        </div>
+                        <div class="text-center mt-2">
+                            <a href="#" class="btn px-4 py-2 portfolio-btn-custom"><i class="fa-solid fa-code me-1"></i> 作品連結</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- section 08 學經歷介紹 -->
+    <section id="s08" class="py-5">
+        <div class="row g-0">
+            <div class="col-md-5 bg-img experience-img" style="background-image: url(images/Film/film-v01.avif); background-size: cover; background-position: center;"></div>
+        </div>
+
+        <div class="container py-4">
+            <div class="row align-items-center">
+                <div class="col-md-7 py-3 px-4 px-md-3">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold mb-1">學經歷介紹</h2>
+                        <span class="text-uppercase fw-semibold" style="color: var(--accent); letter-spacing: 2px; font-size: 0.85rem;">Education & Experience</span>
+                    </div>
+
+                    <dl class="row experience-list g-4 mb-0">
+                        <dt class="col-md-3 text-md-end fw-bold">工作經歷</dt>
+                        <dd class="col-md-9">
+                            <h6 class="fw-bold mb-1">ERP 系統實務與專案協作</h6>
+                            <p class="text-muted small mb-0" style="line-height: 1.6;">累積多年企業級 ERP 系統操作與商業流程導入經驗。培養了解析複雜業務邏輯、嚴謹除錯及跨部門溝通的扎實軟實力，為轉職前端打下穩固根基。</p>
+                        </dd>
+
+                        <dt class="col-md-3 text-md-end fw-bold">學歷背景</dt>
+                        <dd class="col-md-9">
+                            <h6 class="fw-bold mb-1">大專院校 / 相關學系</h6>
+                            <p class="text-muted small mb-0" style="line-height: 1.6;">具備扎實的學術基礎與良好的資訊素養，養成持續自主學習與邏輯思維的習慣。</p>
+                        </dd>
+
+                        <dt class="col-md-3 text-md-end fw-bold">專業職訓</dt>
+                        <dd class="col-md-9">
+                            <h6 class="fw-bold mb-1">職訓局 AI 輔助全端程式設計師養成班</h6>
+                            <p class="text-muted small mb-0" style="line-height: 1.6;">接受高強度實戰訓練，專精 HTML5、CSS3、JavaScript、PHP、Laravel 與 Git 版本控制。透過多項專案實作，全面掌握現代網頁前後端開發與 AI 協作技術。</p>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- section 09 聯絡我 -->
+    <section id="s09" class="py-5">
+        <div class="container py-4">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold mb-1">
+                    聯絡我
+                    <span class="d-block d-md-inline-block text-uppercase fw-semibold ms-md-2" style="color: var(--accent); letter-spacing: 2px; font-size: 0.95rem;">Get In Touch</span>
+                </h2>
+                <p class="text-muted small mt-2">無論是面試邀約、專案合作或技術交流，歡迎隨時與我聯繫！</p>
+            </div>
+
+            <div class="row g-4 align-items-stretch">
+                <div class="col-md-6 order-1 order-md-2 d-flex">
+                    <div class="p-4 p-lg-5 shadow-sm bg-white w-100 d-flex flex-column justify-content-between" style="border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                        <form class="d-flex flex-column h-100 justify-content-between">
+                            <div>
+                                <div class="mb-3 form-floating">
+                                    <input type="text" class="form-control custom-input" id="username" placeholder="請輸入您的姓名">
+                                    <label for="username" class="text-muted">您的姓名</label>
+                                </div>
+                                <div class="mb-3 form-floating">
+                                    <input type="email" class="form-control custom-input" id="email" placeholder="name@example.com">
+                                    <label for="email" class="text-muted">電子郵件 (Email)</label>
+                                </div>
+                                <div class="mb-3">
+                                    <select name="subject" id="subject" class="form-select custom-input py-3">
+                                        <option value="" disabled selected> --- 請選擇聯絡主題 --- </option>
+                                        <option value="面試邀約">面試邀約</option>
+                                        <option value="專案討論">專案討論</option>
+                                        <option value="接案洽談">接案洽談</option>
+                                        <option value="其他">其他</option>
+                                    </select>
+                                </div>
+                                <div class="mb-4">
+                                    <textarea name="message" id="message" class="form-control custom-input" rows="4" placeholder="請輸入您想交流的訊息內容..."></textarea>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end gap-2 mt-auto">
+                                <button type="reset" class="btn px-4 py-2 contact-btn-cancel">取消重填</button>
+                                <button type="submit" class="btn px-4 py-2 contact-btn-submit">確認送出</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-md-6 order-2 order-md-1 d-flex">
+                    <div class="map-container w-100 shadow-sm" style="border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-color); min-height: 350px;">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d465872.91749562806!2d120.30509154737666!3d24.184629664092952!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34693d65575df2d1%3A0x8dd494fb51747b0a!2z6Ie65Lit5biC5YyX5Y2A5LqU5bi46YeM6Ie65Lit!5e0!3m2!1szh-TW!2stw!4v1793674162748!5m2!1szh-TW!2stw" width="100%" height="100%" style="border:0; display: block;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- section 10 未來展望 & 職涯發展 -->
+    <section id="s10" class="overflow-hidden">
+        <div class="row g-0">
+            <div class="col-md-6 bg-img vision-col d-flex align-items-center p-4 p-lg-5" style="background-image: url(images/Film/s10-2.avif);">
+                <div class="col-12 col-lg-8 p-4 shadow-lg vision-card" style="background-color: var(--s10-card-bg); border-radius: var(--radius-md); backdrop-filter: blur(4px);">
+                    <div class="mb-3">
+                        <h2 class="fw-bold mb-1" style="color: var(--s10-text-title);">未來願景</h2>
+                        <span class="d-block text-uppercase fw-semibold" style="color: var(--accent); letter-spacing: 2px; font-size: 0.9rem;">Future Vision</span>
+                    </div>
+
+                    <ul class="list-unstyled mb-4" style="color: var(--s10-text-body); line-height: 1.8;">
+                        <li class="mb-2">
+                            <i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>
+                            <strong>核心定位</strong>：全端工程師
+                            <div class="mt-1">
+                                <span class="badge tech-tag me-1">HTML5</span>
+                                <span class="badge tech-tag me-1">CSS3</span>
+                                <span class="badge tech-tag me-1">JavaScript</span>
+                                <span class="badge tech-tag me-1">PHP / Laravel</span>
+                            </div>
+                        </li>
+                        <li class="mb-2">
+                            <i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>
+                            <strong>商業邏輯</strong>：企業級系統實務與流程對焦
+                            <div class="mt-1">
+                                <span class="badge tech-tag me-1">ERP 系統</span>
+                                <span class="badge tech-tag me-1">需求解析</span>
+                            </div>
+                        </li>
+                        <li class="mb-2">
+                            <i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>
+                            <strong>技術深化</strong>：演算法與模組化架構設計
+                            <div class="mt-1">
+                                <span class="badge tech-tag me-1">Python</span>
+                                <span class="badge tech-tag me-1">Git 版本控制</span>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div>
+                        <a href="#s07" class="btn px-4 py-2 vision-btn" style="background-color: var(--s10-btn-bg); color: var(--s10-btn-text);">查看我的作品</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 bg-img career-col d-flex align-items-center p-4 p-lg-5" style="background-image: url(images/Film/film-v05.avif);">
+                <div class="col-12 col-lg-8 p-4 shadow-lg career-card" style="background-color: var(--s10-card-bg); border-radius: var(--radius-md); backdrop-filter: blur(4px);">
+                    <div class="mb-3">
+                        <h2 class="fw-bold mb-1" style="color: var(--s10-text-title);">職涯發展</h2>
+                        <span class="d-block text-uppercase fw-semibold" style="color: var(--accent); letter-spacing: 2px; font-size: 0.9rem;">Career Development</span>
+                    </div>
+
+                    <ul class="list-unstyled mb-4" style="color: var(--s10-text-body); line-height: 1.8;">
+                        <li class="mb-2">
+                            <i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>
+                            <strong>近期目標</strong>：前/後端開發與團隊協作
+                            <div class="mt-1">
+                                <span class="badge tech-tag me-1">前後端實戰</span>
+                                <span class="badge tech-tag me-1">跨部門溝通</span>
+                            </div>
+                        </li>
+                        <li class="mb-2">
+                            <i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>
+                            <strong>效率驅動</strong>：導入 AI 協作工具優化開發流程
+                            <div class="mt-1">
+                                <span class="badge tech-tag me-1">AI 輔助開發</span>
+                                <span class="badge tech-tag me-1">高效除錯</span>
+                            </div>
+                        </li>
+                        <li class="mb-2">
+                            <i class="fa-solid fa-check me-2" style="color: var(--accent);"></i>
+                            <strong>長期願景</strong>：雲端架構與大數據產品參與
+                            <div class="mt-1">
+                                <span class="badge tech-tag me-1">雲端部署</span>
+                                <span class="badge tech-tag me-1">系統擴展</span>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div>
+                        <a href="#s09" class="btn px-4 py-2 career-btn" style="background-color: var(--s10-btn-bg); color: var(--s10-btn-text);">與我聯絡</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- section 11 Footer 頁尾 -->
+    <section id="s11" class="py-4">
+        <div class="container">
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+                <div class="small text-muted">
+                    © 2026 Personal Portfolio. All Rights Reserved.
+                </div>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link footer-link small px-2" href="#s03">首頁</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link footer-link small px-2" href="#s06">關於我</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link footer-link small px-2" href="#s07">精選作品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link footer-link small px-2" href="#s09">聯絡我</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/counterup2@2.0.2/dist/index.js"></script>    
+    <script src="js/wow.min.js"></script>
+    <script>
+        const counterUp = window.counterUp.default
+
+        const callback = entries => {
+            entries.forEach(entry => {
+                const el = entry.target
+                if (entry.isIntersecting && !el.classList.contains('is-visible')) {
+                    counterUp(el, {
+                        duration: 2000,
+                        delay: 16,
+                    })
+                    el.classList.add('is-visible')
+                }
+            })
+        }
+
+        const IO = new IntersectionObserver(callback, { threshold: 1 })
+
+        const el01 = document.querySelector('.counter01')
+        IO.observe(el01)
+
+        const el02 = document.querySelector('.counter02')
+        IO.observe(el02)
+
+        const el03 = document.querySelector('.counter03')
+        IO.observe(el03)
+
+        const el04 = document.querySelector('.counter04')
+        IO.observe(el04)
+
+        new WOW().init();
+    </script>
+</body>
+
+</html>
