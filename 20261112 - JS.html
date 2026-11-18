@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript 重點整理 for CRUD</title>
+</head>
+
+<body>
+    <script src="js/jquery-4.0.0.js"></script>
+    <script src="js/TravelFood.js"></script>
+    <script>
+        /* 
+        1. map(): 資料格式轉換/重構
+        用來對陣列中的每個元素執行指定函式，並回傳一個包含處理結果的新陣列，不會改變原本的陣列。
+        多用於篩選資料欄位, 重新命名欄位名稱, 方便整合不同系統資料
+
+        2. trim(), ?? : 資料清洗, 主要針對空值跟空白, 通常在map()一起做
+        空值有三種: null, undefined, '', 能用的只有'', 其餘兩種通常會產生問題
+        例如: Uncaught TypeError: Cannot read properties of null (reading 'length')
+
+        3. filter(): 篩選資料
+        4. slice(start, end): 分頁
+           
+        */
+
+        const shops = [
+            {
+                name: '美食小吃店',
+                city: '臺北市',
+                tel: '     02-12344878',
+                address: '信義區忠孝東路五段100號',
+                businessHours: '11:00 - 21:00'
+            },
+            {
+                name: '悠閒咖啡館',
+                city: null,
+                tel: '04-12541234            ',
+                address: '西屯區台灣大道三段250號',
+                businessHours: '08:00 - 18:00'
+            },
+            {
+                name: '手作蛋糕坊    ',
+                city: '臺南市',
+                tel: '',
+                address: '中西區中正路50號',
+                businessHours: '   12:00 - 20:00'
+            },
+            {
+                name: '好吃牛肉湯',
+                city: '臺南市',
+                tel: '06-12347896',
+                address: '中西區中正路50號',
+                businessHours: '   06:00 - 20:00'
+            },
+            {
+                name: '美味蟹堡',
+                city: '澎湖縣',
+                tel: '06-12347896',
+                address: '中西區中正路50號',
+                businessHours: '   06:00 - 20:00'
+            },
+            {
+                name: '海龜海龜燒',
+                city: '澎湖縣',
+                tel: '06-12347896',
+                address: '中西區中正路50號',
+                businessHours: '   06:00 - 20:00'
+            },
+            {
+                name: '港式飲茶餐廳',
+                city: '高雄市',
+                tel: undefined,
+                address: '鼓山區美術館路88號    ',
+                businessHours: '11:30 - 22:00'
+            },
+            {
+                name: '    日系烘焙麵包店',
+                city: '   新竹市',
+                tel: '03-5566778',
+                address: '東區光復路二段120號',
+                businessHours: '09:30 - 21:30'
+            },
+            {
+                name: '    歐式烘焙麵包店',
+                city: '   花蓮市',
+                tel: '03-5566778',
+                address: '東區光復路二段120號',
+                businessHours: '09:30 - 21:30'
+            }
+        ];
+
+        // const 新陣列 = 舊陣列.map(function(元素item){
+        //      return 元素.欄位名稱
+        // })
+        const names = shops.map(function (item) {
+            return item.name;
+        });
+
+        console.log('原始資料', shops);
+        console.log('map後的資料', names);
+
+        // 使用map()並且產生新的結構
+        const simpleData = shops.map(function (item) {
+            return {
+                title: item.name,
+                location: item.city
+            }
+        })
+
+        console.log('新結構:', simpleData);
+
+        // 資料清洗
+        // 測試資料異常的狀況
+        // shops.forEach(function(item){
+        //     console.log(item.tel.length);
+        // });
+
+        const cleanShops = shops.map(function (item) {
+            return {
+                // ??: 如果 ?? 左邊的字串是 null/undefined, 就改成''
+                // trim(): 去除頭尾的空白
+                name: (item.name ?? '').trim(),
+                city: (item.city ?? '').trim(),
+                tel: (item.tel ?? '').trim(),
+                address: (item.address ?? '').trim(),
+                businessHours: (item.businessHours ?? '').trim()
+            }
+        });
+        console.log('cleanShops: ', cleanShops);
+
+        // 資料清洗的自訂程式(副程式)
+        // 結果同上, 只是改成用副程式執行, 當資料量大時, 方便維護程式碼
+        function normalize(data) {
+            return data.map(function (item) {
+                return {
+                    name: (item.name ?? '').trim(),
+                    city: (item.city ?? '').trim(),
+                    tel: (item.tel ?? '').trim(),
+                    address: (item.address ?? '').trim(),
+                    businessHours: (item.businessHours ?? '').trim()
+                }
+            });
+        };
+
+        console.log('使用副程式執行資料清洗: ', normalize(shops));
+
+
+        // 搜尋 filter
+        // 記得清洗後再篩選, 避免前後有空白, 然後查不到資料
+        const result = shops.filter(function (item) {
+            return item.city === '新竹市'
+        });
+        console.log('原本的搜尋結果: ', result);
+
+        const resultClean = normalize(shops).filter(function (item) {
+            return item.city === '新竹市'
+        });
+        console.log('清洗後的搜尋結果: ', resultClean);
+
+        // 關鍵字搜尋 includes()
+        const resultFiliter = normalize(shops).filter(function (item) {
+            return item.city === '臺南市' && item.name.includes('蛋糕')
+        });
+        console.log('臺南市的蛋糕: ', resultFiliter);
+
+        const resultFiliter2 = normalize(shops).filter(function (item) {
+            return item.name.includes('港式') || item.name.includes('小吃')
+        });
+        console.log('港式或小吃: ', resultFiliter2);
+
+        // 分頁
+        /* 將分頁的思考邏輯轉換成演算法, 在寫成程式碼
+           pageSize = 一頁幾筆
+           page = 第幾頁
+           start = 起始筆數: (頁數 - 1) * 一頁幾筆
+           end = 結束筆數: 起始筆數 + 一頁幾筆
+           slice(start, end): 從[起始筆數]到[結束筆數]切段, 最後一筆不算 */
+
+        const pageSize = 3;
+        const page = 2;
+        const start = (page - 1) * pageSize;
+        const end = start + pageSize;
+        const pageData = shops.slice(start, end);
+
+        console.log('原始資料: ', shops);
+        console.log('分頁資料: ', pageData);
+
+
+
+
+        // 練習題: 
+        // 載入TravelFood.js, 使用map()並且產生新的結構
+        console.log(food);
+
+        const simpleFood = food.map(function (item, index) {
+            return {
+                id: index + 1,
+                name: item.Name,
+                city: item.City,
+                img: item.PicURL
+            }
+        });
+        // console.log(simpleFood);
+
+        // 1. 清洗資料(副程式)
+        // 2. 篩選出臺中市有介紹(FoodFeature)美食的店家
+        function normalizeFood(data) {
+            return data.map(function (item, index) {
+                return {
+                    id: index + 1,
+                    name: (item.Name ?? '').trim(),
+                    city: (item.City ?? '').trim(),
+                    tel: (item.Tel ?? '').trim(),
+                    address: (item.Address ?? '').trim(),
+                    foodfeature: (item.FoodFeature ?? '').trim()
+                }
+            });
+        };
+
+        const cleanFood = normalizeFood(food);
+        console.log('使用副程式清洗後的food: ', cleanFood);
+
+        const resultFoodFilter = cleanFood.filter(function (item) {
+            return item.city === '臺中市' && item.foodfeature.includes('美食')
+        });
+        console.log('篩選出臺中市&介紹(FoodFeature)有[美食]的店家: ', resultFoodFilter);
+
+        // 練習分頁
+        const foodPageSize = 20;
+        const foodPage = 1;
+        const foodStart = (foodPage - 1) * foodPageSize;
+        const foodEnd = foodStart + foodPageSize;
+        const foodData = cleanFood.slice(foodStart, foodEnd);
+
+        console.log('cleanFood 每20筆一頁: ', foodData);
+
+        // 練習篩選+分頁
+        const filterTaichung = cleanFood.filter(function (item) {
+            return item.city === '臺中市' || item.city === '臺南市'
+        });
+
+        console.log('篩選後的臺中和台南資料, : ', filterTaichung);
+
+        const pagesTaichung = filterTaichung.slice(foodStart, foodEnd)
+        console.log(' --- 篩選後的臺中和台南資料, 每20筆一頁 ---');
+        console.log('第', foodPage, '頁的結果: ', pagesTaichung);
+
+        // 將分頁整理成副程式
+        function pagination(data, pageSize, page) {
+            const start = (page - 1) * pageSize;
+            const end = start + pageSize;
+
+            return data.slice(start, end);
+        }
+
+        console.log(' --- 改寫成副程式 ---');
+        console.log('第1頁的結果: ', pagination(filterTaichung, 15, 1));
+        console.log('第2頁的結果: ', pagination(filterTaichung, 15, 2));
+
+    </script>
+</body>
+
+</html>

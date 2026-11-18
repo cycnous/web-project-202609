@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Demo - 旅館民宿</title>
+</head>
+
+<body>
+    <script src="js/jquery-4.0.0.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- 
+        ajax 讀取資料後
+        1. 資料轉換 map(), 取出所需要的欄位
+        2. 資料清洗 null, undefined, 去除頭尾空白
+        3. 過濾, 台中市房價低於3800元的旅館
+        4. 分頁, 每頁20筆, 可以指定頁碼
+
+        延伸
+        1. 找出最低房價介於 2000 - 4000 的旅宿
+        2. 排除沒有電話, 沒有房價的旅宿
+    -->
+
+    <script>
+        $(function () {
+            $.ajax({
+                type: 'GET',
+                url: 'js/json/HotelList.json',
+                dataType: 'json',
+                success: showdata,
+                error: function () {
+                    console.log('讀取json失敗')
+                    Swal.fire({
+                        title: "連線錯誤",
+                        text: "旅館資料API讀取錯誤, 請聯絡管理者",
+                        icon: "error"
+                    });
+                }
+            });
+        });
+
+        function showdata(data) {
+            console.log('全部資料', data.Hotels);
+
+            const cleanData = normalize(data.Hotels);
+            console.log('清洗後的全部資料: ', cleanData);
+
+            const filterData = cleanData.filter(function (item) {
+                return item.city === '臺中市' && item.LPrice < 3800
+            });
+            console.log('台中市房價低於3800元的旅館: ', filterData);
+
+            const pageSize = 20;
+            let page = 1;
+            // console.log('第', page, '頁的內容:', pagination(filterData, pageSize, page));
+
+            const pageCnt = Math.ceil(filterData.length / pageSize);
+            while (page <= pageCnt) {
+                console.log('第', page, '頁的內容:', pagination(filterData, pageSize, page));
+                page = page + 1;
+            }
+
+            const filterData02 = cleanData.filter(function(item){
+                return item.LPrice > 1999 && item.LPrice < 4001
+            });
+            console.log('最低房價介於 2000 - 4000 的旅宿',filterData02);
+
+            const filterData03 = cleanData.filter(function(item){
+                return item.tel != '' && item.LPrice != ''
+            });
+            console.log('排除沒有電話, 沒有房價的旅宿',filterData03);
+        }
+
+        function normalize(data) {
+            return data.map(function (item, index) {
+                return {
+                    id: index + 1,
+                    name: (item.HotelName ?? '').trim(),
+                    desc: (item.Description ?? '').trim(),
+                    city: (item.PostalAddress.City ?? '').trim(),
+                    town: (item.PostalAddress.Town ?? '').trim(),
+                    address: (item.PostalAddress.StreetAddress ?? '').trim(),
+                    tel: (item.Telephones[0].Tel ?? '').trim(),
+                    LPrice: (item.LowestPrice ?? ''),
+                    CPrice: (item.CeilingPrice ?? '')
+                }
+            });
+        }
+
+        function pagination(data, pageSize, page) {
+            const start = (page - 1) * pageSize;
+            const end = start + pageSize;
+
+            return data.slice(start, end);
+        }
+    </script>
+
+</body>
+
+</html>
