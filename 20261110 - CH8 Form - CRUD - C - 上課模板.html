@@ -10,8 +10,35 @@
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">CRUD練習</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="#">首頁</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="20261110 - CH8 From - CRUD - C.html">產品建檔</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">產品列表</a>
+                    </li>
+                </ul>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
     <div class="container p-2">
-        <div class="display-4 fw-600 text-center text-bg-warning p-2">CH8. Form CRUD練習</div>
+        <!-- <div class="display-4 fw-600 text-center text-bg-warning p-2">CH8. Form CRUD練習</div> -->
         <div class="row justify-content-center">
             <div class="col-md-8 mt-3">
                 <div class="card">
@@ -80,7 +107,7 @@
 
     <script>
         let flag_pname = false;
-        let flag_price = false;
+        let flag_price = true;  // 因為有預設價格, 所以初始flag要是true
         let flag_category = false;
         let flag_remark = false;
 
@@ -196,6 +223,30 @@
                     success: function (data) {
                         console.log(data)
                         // 新增成功後, 考慮介面的流暢度
+                        // 談窗顯示新增成功
+                        Swal.fire({
+                            title: "新增成功",
+                            text: "產品資料已建立",
+                            icon: "success"
+                        });
+
+                        // showmsg 關閉
+                        $('#showmsg').addClass('d-none');
+
+                        // 重設欄位資料
+                        $('#pname').val('');
+                        $('#price').val(50);
+                        $('#num').val(50);
+                        $('#cnt').text(50);
+                        $('#category').val('');
+                        $('#remark').val('');
+
+                        // 重設驗證格式 & flag: 可以多個欄位一起處理
+                        $('#pname, #price, #category, #remark').removeClass('is-valid is-invaild');
+                        flag_pname = false;
+                        flag_price = true;
+                        flag_category = false;
+                        flag_remark = false;
                     },
                     error: function () {
                         Swal.fire({
