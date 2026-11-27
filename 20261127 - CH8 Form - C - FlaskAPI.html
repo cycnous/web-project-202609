@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP 產品管理系統 - 產品建檔</title>
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- FontAwesome 圖示庫 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 自訂全站樣式 -->
+    <link rel="stylesheet" href="css/myall.css">
+    <style>
+        /* =========================================
+           1. 系統色彩變數定義 (與產品主表一致)
+           ========================================= */
+        :root {
+            --erp-navy: #1b2a47;
+            /* 沈穩企業深藍 (主色) */
+            --erp-navy-hover: #121c30;
+            /* 深藍懸停色 */
+            --erp-brown: #7f5539;
+            /* 質感經典咖啡 (輔色/點綴) */
+            --erp-brown-hover: #654329;
+            /* 咖啡懸停色 */
+            --erp-brown-soft: #f4f1ea;
+            /* 淺暖咖啡底色 */
+            --erp-bg: #f7f6f2;
+            /* 系統微暖灰白背景 */
+            --erp-border: #eae6df;
+            /* 系統柔和邊框色 */
+            --erp-text: #2b2b2b;
+            /* 主要文字深灰 */
+        }
+
+        body {
+            background-color: var(--erp-bg);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+            color: var(--erp-text);
+        }
+
+        /* =========================================
+           2. 企業級導覽列樣式
+           ========================================= */
+        .navbar-erp {
+            background-color: var(--erp-navy) !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+        }
+
+        .badge-erp {
+            background-color: var(--erp-brown);
+            color: #ffffff;
+        }
+
+        .nav-link-active-erp {
+            color: #ffc107 !important;
+            border-bottom: 2px solid #ffc107;
+        }
+
+        /* =========================================
+           3. 頁面標題與麵包屑導覽
+           ========================================= */
+        .page-header-erp {
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--erp-border);
+            padding: 1.25rem 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .breadcrumb-item a {
+            color: var(--erp-brown);
+            text-decoration: none;
+        }
+
+        .breadcrumb-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* =========================================
+           4. 主表單卡片與輸入框樣式
+           ========================================= */
+        .card-erp {
+            border: 1px solid var(--erp-border);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(27, 42, 71, 0.06);
+            background: #ffffff;
+            overflow: hidden;
+        }
+
+        .card-header-erp {
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--erp-border);
+            padding: 1.25rem 1.5rem;
+        }
+
+        .input-group-text-erp {
+            background-color: #f4f1ea;
+            border-color: #dcd6cd;
+            color: var(--erp-navy);
+            border-right: none;
+        }
+
+        .form-control-erp {
+            border-color: #dcd6cd;
+            border-left: none;
+        }
+
+        .form-control-erp:focus,
+        .form-select:focus {
+            box-shadow: none;
+            border-color: var(--erp-navy);
+        }
+
+        .form-select {
+            border-color: #dcd6cd;
+        }
+
+        /* =========================================
+           5. 按鈕統一風格
+           ========================================= */
+        .btn-erp-navy {
+            background-color: var(--erp-navy);
+            border-color: var(--erp-navy);
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .btn-erp-navy:hover {
+            background-color: var(--erp-navy-hover);
+            border-color: var(--erp-navy-hover);
+            color: #ffffff;
+        }
+
+        .btn-erp-brown {
+            background-color: var(--erp-brown);
+            border-color: var(--erp-brown);
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .btn-erp-brown:hover {
+            background-color: var(--erp-brown-hover);
+            border-color: var(--erp-brown-hover);
+            color: #ffffff;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 1. 企業級導覽列 -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-erp sticky-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+                <span class="badge badge-erp me-2 fs-6"><i class="fa-solid fa-cube"></i> ERP</span>
+                <span>企業資產與商品管理系統</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item me-1">
+                        <a class="nav-link px-3" href="#"><i class="fa-solid fa-gauge me-1"></i> 控制台 (Home)</a>
+                    </li>
+                    <li class="nav-item me-1">
+                        <a class="nav-link active fw-bold px-3 nav-link-active-erp"
+                            href="20261127 - CH8 Form - C - FlaskAPI.html">
+                            <i class="fa-solid fa-square-plus me-1"></i> 產品建檔 (C)
+                        </a>
+                    </li>
+                    <li class="nav-item me-1">
+                        <a class="nav-link px-3" href="20261127 - CH8 Form - R - FlaskAPI.html">
+                            <i class="fa-solid fa-table-list me-1"></i> 產品列表 (RUD)
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- 右側系統狀態 -->
+                <div class="d-flex align-items-center gap-3 text-white-50 small">
+                    <span><i class="fa-solid fa-link text-light me-1"></i> API 連線就緒</span>
+                    <div class="vr bg-secondary"></div>
+                    <span><i class="fa-solid fa-user-shield me-1"></i> 管理員</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. 頁面標題與麵包屑導覽 -->
+    <div class="page-header-erp">
+        <div class="container">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+                <div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-1 small">
+                            <li class="breadcrumb-item"><a href="#"><i class="fa-solid fa-house me-1"></i>系統首頁</a></li>
+                            <li class="breadcrumb-item"><a href="#">產品與庫存模組</a></li>
+                            <li class="breadcrumb-item active text-muted" aria-current="page">商品建立作業</li>
+                        </ol>
+                    </nav>
+                    <h2 class="h4 fw-bold mb-1" style="color: var(--erp-navy);">
+                        <i class="fa-solid fa-file-circle-plus me-2" style="color: var(--erp-brown);"></i>商品建立作業
+                    </h2>
+                    <p class="text-muted small mb-0">於系統中建檔新產品品項，設定初始價格、分類與庫存數量，並同步寫入後端 API 資料庫。</p>
+                </div>
+                <div>
+                    <a href="20261127 - CH8 Form - R - FlaskAPI.html" class="btn btn-erp-brown shadow-sm">
+                        <i class="fa-solid fa-table-list me-1"></i>檢視產品列表
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. 主要內容區塊 -->
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <!-- 產品建檔表單卡片 (col-md-10 與列表主表同寬) -->
+            <div class="col-md-10">
+                <div class="card card-erp">
+                    <div class="card-header card-header-erp d-flex align-items-center justify-content-between">
+                        <div>
+                            <h4 class="mb-0 fw-bold" style="color: var(--erp-navy);"><i
+                                    class="fa-solid fa-pen-to-square me-2" style="color: var(--erp-brown);"></i>新增商品參數設定
+                            </h4>
+                            <small class="text-muted">Enterprise Product Creation Module</small>
+                        </div>
+                        <span class="badge badge-erp px-3 py-2">MOD: PRODUCT_CREATE</span>
+                    </div>
+
+                    <div class="card-body p-4">
+                        <div class="mb-4">
+                            <label for="pname" class="form-label fw-bold" style="color: var(--erp-navy);">
+                                <i class="fa-solid fa-tag me-1" style="color: var(--erp-brown);"></i>商品名稱 (2-6個字) <span
+                                    class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text input-group-text-erp"><i
+                                        class="fa-solid fa-box"></i></span>
+                                <input type="text" class="form-control form-control-lg form-control-erp"
+                                    placeholder="請輸入商品名稱" id="pname">
+                                <div class="valid-feedback">符合規定</div>
+                                <div class="invalid-feedback">不符合規定</div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label for="price" class="form-label fw-bold" style="color: var(--erp-navy);">
+                                    <i class="fa-solid fa-dollar-sign me-1" style="color: var(--erp-brown);"></i>價格
+                                    (1-100) <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text input-group-text-erp">$</span>
+                                    <input type="number" class="form-control form-control-erp" id="price" min="1"
+                                        max="100" value="50">
+                                    <div class="valid-feedback">符合規定</div>
+                                    <div class="invalid-feedback">不符合規定</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="category" class="form-label fw-bold" style="color: var(--erp-navy);">
+                                    <i class="fa-solid fa-layer-group me-1" style="color: var(--erp-brown);"></i>商品分類
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text input-group-text-erp"><i
+                                            class="fa-solid fa-list"></i></span>
+                                    <select name="" id="category" class="form-select form-control-erp">
+                                        <option value="" class="text-center" disabled selected>---請選擇商品分類---</option>
+                                        <option value="零食">零食</option>
+                                        <option value="乳製品">乳製品</option>
+                                        <option value="飲料">飲料</option>
+                                        <option value="食品">食品</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 p-3 rounded-3 border"
+                            style="background-color: #fbf9f6; border-color: #eae6df !important;">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label for="num" class="form-label fw-bold mb-0" style="color: var(--erp-navy);">
+                                    <i class="fa-solid fa-cubes me-1" style="color: var(--erp-brown);"></i>數量設定
+                                </label>
+                                <span class="badge badge-erp fs-6 px-3">當前選擇：<span id="cnt"
+                                        class="text-warning fw-bold">50</span>個</span>
+                            </div>
+                            <input type="range" class="form-range" id='num' min="1" max="100" step="1" value="50">
+                            <div class="d-flex justify-content-between text-muted small fw-semibold">
+                                <span>1</span><span>100</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="remark" class="form-label fw-bold" style="color: var(--erp-navy);">
+                                <i class="fa-solid fa-comment-dots me-1" style="color: var(--erp-brown);"></i>備註
+                                (2-10個字) <span class="text-danger">*</span>
+                            </label>
+                            <textarea id="remark" class="form-control form-control-erp" rows="3"
+                                placeholder="商品需注意的事項"></textarea>
+                            <div class="valid-feedback">符合規定</div>
+                            <div class="invalid-feedback">不符合規定</div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer bg-light px-4 py-3 text-end">
+                        <button class="btn btn-outline-secondary px-4 me-2">取消</button>
+                        <button class="btn btn-erp-navy px-4" id="ok_btn">確認</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 確認送出預覽區塊 (保持與主表同寬 col-md-10) -->
+            <div class="col-md-10 mt-4 d-none" id="showmsg">
+                <div class="card card-erp shadow" style="border: 2px solid var(--erp-brown);">
+                    <div class="card-header py-3 d-flex justify-content-between align-items-center"
+                        style="background-color: #f4f1ea;">
+                        <h5 class="mb-0 fw-bold" style="color: var(--erp-navy);"><i
+                                class="fa-solid fa-clipboard-check me-2" style="color: var(--erp-brown);"></i>商品資料建立確認
+                        </h5>
+                        <span class="badge badge-erp">請再次核對</span>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+                            <div class="col-md-6 border-bottom pb-2"><span class="text-muted me-2">商品名稱:</span> <span
+                                    class="fw-bold fs-5" style="color: var(--erp-navy);">xxx</span></div>
+                            <div class="col-md-6 border-bottom pb-2"><span class="text-muted me-2">商品數量:</span> <span
+                                    class="fw-bold fs-5" style="color: var(--erp-navy);">xxx</span></div>
+                            <div class="col-md-6 border-bottom pb-2"><span class="text-muted me-2">商品價格:</span> <span
+                                    class="fw-bold fs-5" style="color: var(--erp-navy);">xxx</span></div>
+                            <div class="col-md-6 border-bottom pb-2"><span class="text-muted me-2">商品分類:</span> <span
+                                    class="fw-bold fs-5" style="color: var(--erp-navy);">xxx</span></div>
+                            <div class="col-12 pb-2"><span class="text-muted me-2">商品備註:</span> <span
+                                    class="fw-bold fs-5" style="color: var(--erp-navy);">xxx</span></div>
+                        </div>
+                        <div class="d-flex gap-2 mt-4">
+                            <button class="btn btn-outline-secondary w-50 py-2"
+                                onclick="$('#showmsg').addClass('d-none')"><i
+                                    class="fa-solid fa-rotate-left me-1"></i>取消</button>
+                            <button class="btn btn-erp-brown w-50 py-2 fw-bold" id='send_btn'><i
+                                    class="fa-solid fa-paper-plane me-1"></i>確認送出</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery-4.0.0.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- 原有 JavaScript 邏輯完全保留[cite: 2] -->
+    <script>        
+        const API_URL = `http://localhost:8080/product`;
+        let flag_pname = false;
+        let flag_price = true;  // 因為有預設價格, 所以初始flag要是true
+        let flag_category = false;
+        let flag_remark = false;
+
+        $(function () {
+            $('#pname').on('change', function () {
+                if ($(this).val().length > 1 && $(this).val().length < 7) {
+                    $(this).removeClass('is-invalid');
+                    $(this).addClass('is-valid');
+                    flag_pname = true;
+                } else {
+                    $(this).removeClass('is-valid');
+                    $(this).addClass('is-invalid');
+                    flag_pname = false;
+                }
+            });
+
+            $('#price').on('change', function () {
+                if ($(this).val() > 0 && $(this).val() < 101) {
+                    $(this).removeClass('is-invalid');
+                    $(this).addClass('is-valid');
+                    flag_price = true;
+                } else {
+                    $(this).removeClass('is-valid');
+                    $(this).addClass('is-invalid');
+                    flag_price = false;
+                }
+            });
+
+            $('#num').on('change', function () {
+                $('#cnt').text($(this).val())
+            });
+
+            $('#category').on('change', function () {
+                flag_category = true;
+            });
+
+            $('#remark').on('change', function () {
+                if ($(this).val().length > 1 && $(this).val().length < 11) {
+                    $(this).removeClass('is-invalid');
+                    $(this).addClass('is-valid');
+                    flag_remark = true;
+                } else {
+                    $(this).removeClass('is-valid');
+                    $(this).addClass('is-invalid');
+                    flag_remark = false;
+                }
+            });
+
+            $('#ok_btn').on('click', function () {
+                if (flag_pname && flag_price && flag_category && flag_remark) {
+                    console.log('ok_btn success')
+                    $('#showmsg').removeClass('d-none');
+
+                    const pname = $('#pname').val();
+                    const price = $('#price').val();
+                    const num = $('#num').val();
+                    const category = $('#category').val();
+                    const remark = $('#remark').val();
+
+                    let strHTML = `<div class="card card-erp shadow" style="border: 2px solid var(--erp-brown);">
+                                <div class="card-header py-3 d-flex justify-content-between align-items-center" style="background-color: #f4f1ea;">
+                                    <h5 class="mb-0 fw-bold" style="color: var(--erp-navy);"><i class="fa-solid fa-clipboard-check me-2" style="color: var(--erp-brown);"></i>商品資料建立確認</h5>
+                                    <span class="badge badge-erp">請再次核對</span>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="row g-3">
+                                        <div class="col-md-6 border-bottom pb-2"><span class="text-muted me-2">商品名稱:</span> <span class="fw-bold fs-5" style="color: var(--erp-navy);">${pname}</span></div>
+                                        <div class="col-md-6 border-bottom pb-2"><span class="text-muted me-2">商品數量:</span> <span class="fw-bold fs-5" style="color: var(--erp-navy);">${num}</span></div>
+                                        <div class="col-md-6 border-bottom pb-2"><span class="text-muted me-2">商品價格:</span> <span class="fw-bold fs-5" style="color: var(--erp-navy);">${price}</span></div>
+                                        <div class="col-md-6 border-bottom pb-2"><span class="text-muted me-2">商品分類:</span> <span class="fw-bold fs-5" style="color: var(--erp-navy);">${category}</span></div>
+                                        <div class="col-12 pb-2"><span class="text-muted me-2">商品備註:</span> <span class="fw-bold fs-5" style="color: var(--erp-navy);">${remark}</span></div>
+                                    </div>
+                                    <div class="d-flex gap-2 mt-4">
+                                        <button class="btn btn-outline-secondary w-50 py-2" onclick="$('#showmsg').addClass('d-none')"><i class="fa-solid fa-rotate-left me-1"></i>取消</button>
+                                        <button class="btn btn-erp-brown w-50 py-2 fw-bold" id='send_btn'><i class="fa-solid fa-paper-plane me-1"></i>確認送出</button>
+                                    </div>
+                                </div>
+                            </div>`;
+                    $('#showmsg').html(strHTML);
+                } else {
+                    console.log('flag_pname:', flag_pname)
+                    console.log('flag_price:', flag_price)
+                    console.log('flag_category:', flag_category)
+                    console.log('flag_remark:', flag_remark)
+                    Swal.fire({
+                        title: "欄位錯誤",
+                        text: "欄位錯誤, 請修正",
+                        icon: "error",
+                        confirmButtonColor: "#1b2a47"
+                    });
+                };
+            });
+
+            // 確認送出
+            $('#showmsg').on('click', '#send_btn', function () {
+                const pname = $('#pname').val();
+                const price = $('#price').val();
+                const num = $('#num').val();
+                const category = $('#category').val();
+                const remark = $('#remark').val();
+
+                const dataJSON = {
+                    "name": pname,
+                    "category": category,
+                    "price": price,
+                    "num": num,
+                    "remark": remark
+                };
+
+                console.log(dataJSON);
+
+                $.ajax({
+                    type: 'POST',
+                    url: API_URL,
+                    dataType: 'json',
+                    data: JSON.stringify(dataJSON),
+                    contentType: 'application/json',
+                    success: function (data) {
+                        console.log(data)
+                        Swal.fire({
+                            title: "新增成功",
+                            text: "產品資料已建立",
+                            icon: "success",
+                            confirmButtonColor: "#1b2a47"
+                        });
+
+                        $('#showmsg').addClass('d-none');
+
+                        // 重設欄位資料
+                        $('#pname').val('');
+                        $('#price').val(50);
+                        $('#num').val(50);
+                        $('#cnt').text(50);
+                        $('#category').val('');
+                        $('#remark').val('');
+
+                        $('#pname, #price, #category, #remark').removeClass('is-valid is-invalid');
+                        flag_pname = false;
+                        flag_price = true;
+                        flag_category = false;
+                        flag_remark = false;
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: "新增失敗",
+                            text: "無法連結後端API",
+                            icon: "error",
+                            confirmButtonColor: "#1b2a47"
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
